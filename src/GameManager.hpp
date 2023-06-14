@@ -71,4 +71,6 @@ void GameManager::initMisc()
     //set misc
     getmaxyx(stdscr, Misc::WIN_HEIGHT, Misc::WIN_WIDTH);
     Misc::MAP_SIZE = 21;
+    Misc::SNAKE_START_XPOS = 10;
+    Misc::SNAKE_START_YPOS = 10;
 }
