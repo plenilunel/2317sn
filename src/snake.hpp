@@ -28,7 +28,7 @@ void Snake::awake() {
     head->x = Misc::SNAKE_START_XPOS;
     head->y = Misc::SNAKE_START_YPOS;
     snake_size = 1;
-    GameManager& mg;
+
 }
 
 void Snake::move(int dest_x, int dest_y) {
