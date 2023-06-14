@@ -4,7 +4,7 @@
 
 int main()
 {
-    GameManager gm;
+    GameManager& gm = GameManager::getInst();
 
     gm.awake();
     int game_condition;

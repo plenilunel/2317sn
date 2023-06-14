@@ -21,4 +21,5 @@ enum BlockType{
 enum GameCondition{
     Defeat, Win
 };
+
 #endif //SNAKE_MISC_HPP

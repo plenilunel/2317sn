@@ -1,5 +1,8 @@
+
 #ifndef SNAKE_SNAKE_HPP
 #define SNAKE_SNAKE_HPP
+
+#include "GameManager.hpp"
 
 class Snake{
 private:
@@ -9,23 +12,31 @@ private:
         Body *next;
     };
 public:
-    //TODO : insert, refresh to map function
-    Snake();
     Body *head;
     int snake_size;
 
+    //TODO : insert, refresh to map function
+    void awake();
     // move snake to dest_x,y position
     void move(int dest_x, int dest_y);
     void insert();
 
 };
 
-Snake::Snake()
-{
+void Snake::awake() {
     head = new Body;
     head->next = nullptr;
-    head->x = 10;
-    head->y = 10;
+    head->x = Misc::SNAKE_START_XPOS;
+    head->y = Misc::SNAKE_START_YPOS;
+    snake_size = 1;
+}
+
+void Snake::move(int dest_x, int dest_y) {
+
+}
+
+void Snake::insert() {
+
 }
 
 #endif //SNAKE_SNAKE_HPP
