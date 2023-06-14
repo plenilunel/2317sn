@@ -1,8 +1,5 @@
+#pragma once
 
-#ifndef SNAKE_SNAKE_HPP
-#define SNAKE_SNAKE_HPP
-
-#include "GameManager.hpp"
 class Snake{
 private:
     struct Body{
@@ -22,20 +19,27 @@ public:
 
 };
 
-void Snake::awake() {
-    head = new Body;
-    head->next = nullptr;
-    head->x = Misc::SNAKE_START_XPOS;
-    head->y = Misc::SNAKE_START_YPOS;
-    snake_size = 1;
-
-}
-
 void Snake::move(int dest_x, int dest_y) {
+
+    int origX = head->x;
+    int origY = head->y;
+
+    Body *p = head;
+    Body *q;
+
+    while(p->next)
+    {
+        q = p;
+
+        p = p->next;
+    }
 }
 
 void Snake::insert() {
 
 }
 
-#endif //SNAKE_SNAKE_HPP
+void Snake::awake() {
+
+}
+

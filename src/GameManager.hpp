@@ -1,10 +1,4 @@
-#ifndef SNAKE_GAME_MANAGER_HPP
-#define SNAKE_GAME_MANAGER_HPP
-
-#include <ncurses.h>
-#include "Board.hpp"
-#include "Misc.hpp"
-#include "snake.hpp"
+#pragma once
 
 class GameManager
 {
@@ -37,9 +31,9 @@ void GameManager::awake()
 
     //init mainBoard
     board.awake(Misc::MAP_SIZE,
-              Misc::MAP_SIZE * 2,
-              (Misc::WIN_HEIGHT - Misc::MAP_SIZE) / 2,
-              (Misc::WIN_WIDTH - Misc::MAP_SIZE) / 2);
+                Misc::MAP_SIZE * 2,
+                (Misc::WIN_HEIGHT - Misc::MAP_SIZE) / 2,
+                (Misc::WIN_WIDTH - Misc::MAP_SIZE) / 2);
 
     //init snake
     snake.awake();
@@ -95,4 +89,3 @@ void GameManager::initMisc()
     Misc::SNAKE_START_YPOS = 10;
 }
 
-#endif //GAME_MANAGER_HPP

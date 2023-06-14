@@ -1,5 +1,10 @@
 #include <ncurses.h>
 #include <csignal>
+#include <ctime>
+
+#include "src/Misc.hpp"
+#include "src/Board.hpp"
+#include "src/snake.hpp"
 #include "src/GameManager.hpp"
 
 int main()

@@ -1,8 +1,4 @@
-#ifndef SNAKE_BOARD_HPP
-#define SNAKE_BOARD_HPP
-
-#include <ncurses.h>
-#include "Misc.hpp"
+#pragma once
 
 class Board
 {
@@ -10,7 +6,6 @@ private:
     int width{}, height{};
     int start_y{}, start_x{};
     WINDOW* win{};
-
     int **map{};
     int m_size{};
 
@@ -25,7 +20,7 @@ public:
     void onDisable();
 
     //아이템, 스네이크가 맵을 refresh할때 쓸 함수
-     void changeMapData(int x, int y, BlockType bt);
+    void changeMapData(int x, int y, BlockType bt);
 };
 
 void Board::awake(int h, int w, int starty, int startx)
@@ -103,8 +98,10 @@ void Board::changeMapData(int x, int y, BlockType bt)
         printw("Out of Range Exception");
         return;
     }
-
+    if(map == nullptr)
+    {
+        //init fail exception
+    }
     map[y][x] = bt;
 }
 
-#endif
