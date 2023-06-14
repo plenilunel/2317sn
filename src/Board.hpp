@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SNAKE_BOARD_HPP
+#define SNAKE_BOARD_HPP
 
 #include <ncurses.h>
 #include "Misc.hpp"
@@ -105,3 +106,5 @@ void Board::changeMapData(int x, int y, BlockType bt)
 
     map[y][x] = bt;
 }
+
+#endif

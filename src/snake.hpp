@@ -3,7 +3,6 @@
 #define SNAKE_SNAKE_HPP
 
 #include "GameManager.hpp"
-
 class Snake{
 private:
     struct Body{
@@ -29,10 +28,10 @@ void Snake::awake() {
     head->x = Misc::SNAKE_START_XPOS;
     head->y = Misc::SNAKE_START_YPOS;
     snake_size = 1;
+    GameManager& mg;
 }
 
 void Snake::move(int dest_x, int dest_y) {
-
 }
 
 void Snake::insert() {

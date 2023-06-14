@@ -1,5 +1,5 @@
-#ifndef GAME_MANAGER_HPP
-#define GAME_MANAGER_HPP
+#ifndef SNAKE_GAME_MANAGER_HPP
+#define SNAKE_GAME_MANAGER_HPP
 
 #include <ncurses.h>
 #include "Board.hpp"
