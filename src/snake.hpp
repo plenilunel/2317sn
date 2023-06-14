@@ -61,7 +61,6 @@ void Snake::insert() {
 }
 
 void Snake::awake() {
-
     head = new Body(Misc::SNAKE_START_XPOS,
                     Misc::SNAKE_START_YPOS);
     snake_size = 1;
