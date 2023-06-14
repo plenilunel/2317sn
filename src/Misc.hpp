@@ -15,4 +15,7 @@ int Misc::MAP_SIZE = 0;
 enum BlockType{
     Empty, Wall, Conner, Item, GateIn, GateOut
 };
+enum GameCondition{
+    Defeat, Win
+};
 #endif //SNAKE_MISC_HPP

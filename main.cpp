@@ -17,29 +17,6 @@ int main()
         usleep(110000);
     }
     gm.onDisable();
-//
-//    for (auto i = 0; i < 30; i++) // draws top
-//    {
-//        mvaddch(0, i, 219);
-//    }
-//
-//    for (auto i = 0; i < 30; i++) // draws bottom
-//    {
-//        mvaddch(30, i, 219);
-//    }
-//
-//    for (auto i = 0; i < 30; i++) // draws left side
-//    {
-//        move(i, 0);
-//        addch(219);
-//    }
-//
-//    for (auto i = 0; i < 30; i++) // draws right side
-//    {
-//        move(i, 30);
-//        addch(219);
-//    }
-//    refresh();
     mvprintw(10, 10, "GAME END..");
     refresh();
     getch();

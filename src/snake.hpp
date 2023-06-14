@@ -8,15 +8,17 @@ using namespace std;
 class Snake{
 private:
     struct Body{
-        int dir_x;
-        int dir_y;
         int x;
         int y;
+        Body *next;
     };
 public:
     //TODO : insert, refresh to map function
-    Body snake[];
-
+    //Body snake[];
+    //or
+    //Bode *head; // linked list expression
+    Body *head;
+    int snake_size;
 };
 
 #endif //SNAKE_SNAKE_HPP
