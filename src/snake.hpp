@@ -83,7 +83,7 @@ void Snake::awake() {
     tail = head;
     for(int i = 1; i < 5; i++)
     {
-        Body *t = new Body(tail->x-2, tail->y);
+        Body *t = new Body(tail->x-1, tail->y);
         t->prev = tail;
         tail->next = t;
         tail = t;
