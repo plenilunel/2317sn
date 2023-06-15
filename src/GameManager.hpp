@@ -111,6 +111,8 @@ void GameManager::initSnakeGame()
 
     init_pair(1, COLOR_BLUE, COLOR_BLUE);
     init_pair(2, COLOR_RED, COLOR_RED);
+    init_pair(3, COLOR_RED, COLOR_WHITE);
+    wbkgd(stdscr, COLOR_PAIR(3));
 }
 
 void GameManager::initMisc()
