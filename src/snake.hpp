@@ -25,28 +25,28 @@ public:
 
 void Snake::move(MoveDir moveDir) {
     m_dir = moveDir;
-    Body *p = tail;
-
-    while(p->prev)
-    {
-        p->x = p->prev->x;
-        p->y = p->prev->y;
-        p = p->prev;
-    }
-
+    Body *p = head;
+    int dx = 0;
+    int dy = 0;
     switch (moveDir) {
         case Up:
-            head->y -= 1;
+            dy = -1;
             break;
         case Down:
-            head->y += 1;
+            dy = 1;
             break;
         case Right:
-            head->x += 1;
+            dx = 1;
             break;
         case Left:
-            head->x -= 1;
+            dx = -1;
             break;
+    }
+    while(p)
+    {
+        p->x += dx;
+        p->y += dy;
+        p = p->next;
     }
 }
 
