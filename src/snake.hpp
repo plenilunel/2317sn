@@ -10,21 +10,20 @@ private:
     };
 public:
     Body *head;
+    Body *tail;
     int snake_size;
-
+    MoveDir m_dir{Right};
     //TODO : insert, refresh to map function
     void awake();
     // move snake to dir_x,y position
-    void move(int dir_x, int dest_y);
+    void move(MoveDir moveDir);
+    bool isAlive();
     void insert();
 
 };
 
-void Snake::move(int dir_x, int dir_y) {
-
-    int origX = head->x;
-    int origY = head->y;
-
+void Snake::move(MoveDir moveDir) {
+    m_dir = moveDir;
     Body *p = head;
     Body *q = nullptr;
 
@@ -42,27 +41,60 @@ void Snake::move(int dir_x, int dir_y) {
         p->y = q->y;
     }
 
-    head->x = origX + dir_x;
-    head->y = origY + dir_y;
+    switch (moveDir) {
+        case Up:
+            head->y -= 1;
+            break;
+        case Down:
+            head->y += 1;
+            break;
+        case Right:
+            head->x += 1;
+            break;
+        case Left:
+            head->x -= 1;
+            break;
+    }
 }
 
 void Snake::insert() {
-    if(head == nullptr)
-    {
+    if (head == nullptr || tail == nullptr) {
         //throw exception
     }
 
-    Body *p = head;
-
-    while (p->next)
-        p = p->next;
-
-
+    Body *tmp = new Body(tail->x, tail->y);
+    switch (m_dir) {
+        case Up:
+            tmp->y += 1;
+            break;
+        case Down:
+            tmp->y -= 1;
+            break;
+        case Right:
+            tmp->x -= 1;
+            break;
+        case Left:
+            tmp->x += 1;
+            break;
+    }
+    tail->next = tmp;
+    tail = tmp;
+    snake_size++;
 }
 
 void Snake::awake() {
+    //처음 진행방향 ->오른쪽(KEY_RIGHT)
     head = new Body(Misc::SNAKE_START_XPOS,
                     Misc::SNAKE_START_YPOS);
-    snake_size = 1;
+    tail = head;
+
+    insert();
+    insert();
+
+    snake_size = 3;
 }
 
+bool Snake::isAlive()
+{
+    return false;
+}

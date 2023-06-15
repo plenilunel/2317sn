@@ -1,7 +1,12 @@
 #include <ncurses.h>
 #include <csignal>
+#include <vector>
+#include <string>
 #include <ctime>
 
+using namespace std;
+
+#include "src/Stage.hpp"
 #include "src/Misc.hpp"
 #include "src/Board.hpp"
 #include "src/snake.hpp"
@@ -9,10 +14,11 @@
 
 int main()
 {
-    GameManager& gm = GameManager::getInst();
+    GameManager gm;
 
     gm.awake();
     int game_condition;
+
     while(true)
     {
         game_condition = gm.update();
