@@ -15,10 +15,11 @@ int Misc::SNAKE_START_XPOS = 0;
 int Misc::SNAKE_START_YPOS = 0;
 
 enum BlockType{
-    Empty, Wall, Conner, Item, GateIn, GateOut
+    Empty, Wall, Conner, Item, GateIn, GateOut, SnakeHead, SnakeBody
 };
+
 enum GameCondition{
-    Defeat, Win
+    Defeat, Update, ToNextStage, Win
 };
 
 

@@ -5,7 +5,7 @@ class Board
 private:
     int width{}, height{};
     int start_y{}, start_x{};
-    WINDOW* win{};
+    WINDOW* win_map{};
     int **map{};
     int m_size{};
 
@@ -20,7 +20,7 @@ public:
     void onDisable();
 
     //아이템, 스네이크가 맵을 refresh할때 쓸 함수
-    void changeMapData(int x, int y, BlockType bt);
+    void refreshMapData(int x, int y, BlockType bt, GameCondition& cond);
 };
 
 void Board::awake(int h, int w, int starty, int startx)
@@ -29,7 +29,7 @@ void Board::awake(int h, int w, int starty, int startx)
     width = w;
     start_y = starty;
     start_x = startx;
-    win = newwin(height, width, start_y, start_x);
+    win_map = newwin(height, width, start_y, start_x);
 
     buildMap();
 }
@@ -38,12 +38,12 @@ void Board::awake(int h, int w, int starty, int startx)
 void Board::update()
 {
 
-    werase(win);
-    box(win, 0, 0);
+    werase(win_map);
+    box(win_map, 0, 0);
 
     printMap();
 
-    wrefresh(win);
+    wrefresh(win_map);
 }
 
 void Board::onDisable()
@@ -52,7 +52,7 @@ void Board::onDisable()
         delete[] map[i];
     delete[] map;
 
-    delwin(win);
+    delwin(win_map);
 }
 
 void Board::buildMap() {
@@ -79,22 +79,35 @@ void Board::printMap()
     {
         for(int j = 0; j < m_size; j++)
         {
-            if(map[i][j] == BlockType::GateIn)
+            if(map[i][j] == BlockType::SnakeHead)
+            {
+                wattron(win_map, COLOR_PAIR(1));
+                mvwprintw(win_map, i, j, "H");
+                wattroff(win_map , COLOR_PAIR(1));
+            }
+            else if (map[i][j] == BlockType::SnakeBody)
+            {
+                wattron(win_map, COLOR_PAIR(2));
+                mvwprintw(win_map, i, j, "H");
+                wattroff(win_map , COLOR_PAIR(2));
+            }
+            else if(map[i][j] == BlockType::GateIn)
             {
                 //TODO : COLOR PAIR 만들기, Snake, Gate, Item 이 프린트 될 색깔 정하기
-                //wattr_on(win, COLOR_PAIR(1));
-                mvwprintw(win, i, j, "O");
-                //wattr_off(win, COLOR_PAIR(1));
+                //wattr_on(win_map, COLOR_PAIR(1));
+                mvwprintw(win_map, i, j, "O");
+                //wattr_off(win_map, COLOR_PAIR(1));
             }
         }
     }
 }
 
-void Board::changeMapData(int x, int y, BlockType bt)
+void Board::refreshMapData(int x, int y, BlockType bt, GameCondition& cond)
 {
     if(x < 0 || y < 0 || x > m_size || y > m_size)
     {
         //invalid condition check
+        //throw
         printw("Out of Range Exception");
         return;
     }

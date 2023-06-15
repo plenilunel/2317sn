@@ -4,12 +4,14 @@ class GameManager
 {
 private:
     int ch{};
-    int condition{1};
+    GameCondition condition{};
     Board board;
     Snake snake{};
 
     static void initSnakeGame();
     static void initMisc();
+
+    GameCondition checkCondition();
 
     GameManager()= default;
     GameManager(const GameManager& other){};
@@ -53,8 +55,10 @@ int GameManager::update()
     else if (ch == KEY_RIGHT)
         snake.move(1, 0);
 
-    //generate item
+    condition = checkCondition();
 
+    //generate item
+    //TODO : condition check
     board.update();
 
     return condition;
@@ -78,6 +82,9 @@ void GameManager::initSnakeGame()
     nodelay(stdscr, TRUE);
     keypad(stdscr, true); // 방향키 , F1 등 입력 받게 하기
     start_color();
+
+    init_pair(1, COLOR_BLUE, COLOR_BLUE);
+    init_pair(2, COLOR_RED, COLOR_RED);
 }
 
 void GameManager::initMisc()
@@ -89,3 +96,17 @@ void GameManager::initMisc()
     Misc::SNAKE_START_YPOS = 10;
 }
 
+GameCondition GameManager::checkCondition()
+{
+    //TODO : Check snake case
+    auto *p = snake.head; //Body* type
+
+    while(p)
+    {
+        board.refreshMapData(p->x, p->y, SnakeBody, condition); // if can't refresh(etc. occur collapse, condition will be changed
+
+        p = p->next;
+    }
+
+    return GameCondition::Win;
+}
