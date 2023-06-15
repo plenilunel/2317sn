@@ -74,9 +74,9 @@ int GameManager::update()
 
     while(p)
     {
-        wattron(board.getWinMap(), COLOR_PAIR(1));
+        //wattron(board.getWinMap(), COLOR_PAIR(1));
         mvwprintw(board.getWinMap(), p->y, p->x, "X");
-        wattroff(board.getWinMap(), COLOR_PAIR(1));
+//        wattroff(board.getWinMap(), COLOR_PAIR(1));
         p = p->next;
     }
 

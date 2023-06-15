@@ -3,10 +3,11 @@
 class Snake{
 private:
     struct Body{
-        explicit Body(int x = -1, int y = -1) : x(x), y(y), next(nullptr) {}
+        explicit Body(int x = -1, int y = -1) : x(x), y(y), next(nullptr) , prev(nullptr){}
         int x;
         int y;
         Body *next;
+        Body *prev;
     };
 public:
     Body *head;
@@ -24,21 +25,13 @@ public:
 
 void Snake::move(MoveDir moveDir) {
     m_dir = moveDir;
-    Body *p = head;
-    Body *q = nullptr;
+    Body *p = tail;
 
-    while(p->next)
+    while(p->prev)
     {
-        q = p;
-        p = p->next;
-        p->x = q->x;
-        p->y = q->y;
-    }
-
-    if(q)
-    {
-        p->x = q->x;
-        p->y = q->y;
+        p->x = p->prev->x;
+        p->y = p->prev->y;
+        p = p->prev;
     }
 
     switch (moveDir) {
@@ -77,6 +70,7 @@ void Snake::insert() {
             tmp->x += 1;
             break;
     }
+    tmp->prev = tail;
     tail->next = tmp;
     tail = tmp;
     snake_size++;
@@ -87,9 +81,12 @@ void Snake::awake() {
     head = new Body(Misc::SNAKE_START_XPOS,
                     Misc::SNAKE_START_YPOS);
     tail = head;
-
-    insert();
-    insert();
+    for(int i = 1; i < 5; i++)
+    {
+        Body *t = new Body(tail->x-2, tail->y);
+        tail->next = t;
+        tail = t;
+    }
 
     snake_size = 3;
 }
