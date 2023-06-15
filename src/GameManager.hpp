@@ -3,7 +3,7 @@
 class GameManager
 {
 private:
-    int ch{};
+    chtype ch{};
     Board board;
     Snake snake{};
 
@@ -67,6 +67,8 @@ int GameManager::update()
             break;
         case 'q':
             return 0;
+        default:
+            snake.move(snake.m_dir);
     }
     board.clear();
 
@@ -94,7 +96,7 @@ int GameManager::update()
 void GameManager::onDisable()
 {
     board.onDisable();
-    //nodelay(stdscr, false);
+    nodelay(stdscr, false);
     clear();
 }
 
@@ -104,7 +106,7 @@ void GameManager::initSnakeGame()
     initscr(); // 터미널 초기화
     cbreak(); // 입력 연속으로 읽게 하기
     noecho(); // 입력 echo 허용안하게 하기 (화면에 입력된 키가 나오지 않게 하기)
-    //nodelay(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
     keypad(stdscr, true); // 방향키 , F1 등 입력 받게 하기
     curs_set(0);
     start_color();
