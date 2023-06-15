@@ -84,19 +84,7 @@ void Board::printMap()
     {
         for(int j = 0; j < width; j++)
         {
-            if(map[i][j] == BlockType::SnakeHead)
-            {
-                wattron(win_map, COLOR_PAIR(1));
-                mvwprintw(win_map, i, j, "H");
-                wattroff(win_map , COLOR_PAIR(1));
-            }
-            else if (map[i][j] == BlockType::SnakeBody)
-            {
-                wattron(win_map, COLOR_PAIR(2));
-                mvwprintw(win_map, i, j, "H");
-                wattroff(win_map , COLOR_PAIR(2));
-            }
-            else if(map[i][j] == BlockType::GateIn)
+            if(map[i][j] == BlockType::GateIn)
             {
                 //wattr_on(win_map, COLOR_PAIR(1));
                 mvwprintw(win_map, i, j, "O");

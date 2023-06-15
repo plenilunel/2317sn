@@ -27,6 +27,7 @@ int main()
             break;
         usleep(110000);
     }
+
     gm.onDisable();
     mvprintw(10, 10, "GAME END..");
     refresh();

@@ -40,6 +40,34 @@ void GameManager::awake()
     snake.awake();
 }
 
+
+void GameManager::initSnakeGame()
+{
+    //게임 초기화
+    initscr(); // 터미널 초기화
+    cbreak(); // 입력 연속으로 읽게 하기
+    noecho(); // 입력 echo 허용안하게 하기 (화면에 입력된 키가 나오지 않게 하기)
+    nodelay(stdscr, TRUE);
+    keypad(stdscr, true); // 방향키 , F1 등 입력 받게 하기
+    curs_set(0);
+    start_color();
+
+    init_pair(1, COLOR_BLUE, COLOR_BLUE);
+    init_pair(2, COLOR_RED, COLOR_RED);
+    init_pair(3, COLOR_RED, COLOR_WHITE);
+    wbkgd(stdscr, COLOR_PAIR(3));
+}
+
+void GameManager::initMisc()
+{
+    //set misc
+    getmaxyx(stdscr, Misc::WIN_HEIGHT, Misc::WIN_WIDTH);
+    Misc::DIMENSION = 48;
+    Misc::SNAKE_START_XPOS = 10;
+    Misc::SNAKE_START_YPOS = 10;
+}
+
+
 int GameManager::update()
 {
     ch = getch();
@@ -74,6 +102,7 @@ int GameManager::update()
 
     auto *p = snake.head;
 
+    //Debug
     while(p)
     {
         //wattron(board.getWinMap(), COLOR_PAIR(1));
@@ -82,12 +111,11 @@ int GameManager::update()
         p = p->next;
     }
 
-    //consume item
+    //TODO : consume item in map
 
-    //generate item
+    //TODO : generate item from item spawner
 
-    //condition check
-
+    //TODO : condition check
 
     board.update();
     return 1;
@@ -98,30 +126,4 @@ void GameManager::onDisable()
     board.onDisable();
     nodelay(stdscr, false);
     clear();
-}
-
-void GameManager::initSnakeGame()
-{
-    //게임 초기화
-    initscr(); // 터미널 초기화
-    cbreak(); // 입력 연속으로 읽게 하기
-    noecho(); // 입력 echo 허용안하게 하기 (화면에 입력된 키가 나오지 않게 하기)
-    nodelay(stdscr, TRUE);
-    keypad(stdscr, true); // 방향키 , F1 등 입력 받게 하기
-    curs_set(0);
-    start_color();
-
-    init_pair(1, COLOR_BLUE, COLOR_BLUE);
-    init_pair(2, COLOR_RED, COLOR_RED);
-    init_pair(3, COLOR_RED, COLOR_WHITE);
-    wbkgd(stdscr, COLOR_PAIR(3));
-}
-
-void GameManager::initMisc()
-{
-    //set misc
-    getmaxyx(stdscr, Misc::WIN_HEIGHT, Misc::WIN_WIDTH);
-    Misc::DIMENSION = 48;
-    Misc::SNAKE_START_XPOS = 10;
-    Misc::SNAKE_START_YPOS = 10;
 }
