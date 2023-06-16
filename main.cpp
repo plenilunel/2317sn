@@ -1,8 +1,6 @@
 #include <ncurses.h>
 #include <csignal>
 #include <vector>
-#include <string>
-#include <ctime>
 
 using namespace std;
 
@@ -12,10 +10,12 @@ using namespace std;
 #include "src/Misc.hpp"
 #include "src/Board.hpp"
 #include "src/snake.hpp"
+#include "src/Spawner.hpp"
 #include "src/GameManager.hpp"
 
 int main()
 {
+
     GameManager gm;
 
     gm.awake();

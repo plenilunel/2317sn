@@ -20,8 +20,24 @@ public:
     void move(MoveDir moveDir);
     bool isAlive();
     void insert();
-
+    void remove();
 };
+
+void Snake::awake() {
+    //처음 진행방향 ->오른쪽(KEY_RIGHT)
+    head = new Body(Misc::SNAKE_START_XPOS,
+                    Misc::SNAKE_START_YPOS);
+    tail = head;
+    for(int i = 1; i < 5; i++)
+    {
+        Body *t = new Body(tail->x-1, tail->y);
+        t->prev = tail;
+        tail->next = t;
+        tail = t;
+    }
+
+    snake_size = 3;
+}
 
 void Snake::move(MoveDir moveDir) {
     m_dir = moveDir;
@@ -76,22 +92,6 @@ void Snake::insert() {
     snake_size++;
 }
 
-void Snake::awake() {
-    //처음 진행방향 ->오른쪽(KEY_RIGHT)
-    head = new Body(Misc::SNAKE_START_XPOS,
-                    Misc::SNAKE_START_YPOS);
-    tail = head;
-    for(int i = 1; i < 5; i++)
-    {
-        Body *t = new Body(tail->x-1, tail->y);
-        t->prev = tail;
-        tail->next = t;
-        tail = t;
-    }
-
-    snake_size = 3;
-}
-
 bool Snake::isAlive()
 {
     if(snake_size < 3)
@@ -107,4 +107,11 @@ bool Snake::isAlive()
     }
 
     return true;
+}
+
+void Snake::remove() {
+    Body *p = tail;
+    tail = tail->prev;
+    delete p;
+    snake_size--;
 }

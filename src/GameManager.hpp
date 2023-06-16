@@ -1,19 +1,19 @@
 #pragma once
 
-#include <curses.h>
-
 class GameManager
 {
 private:
     chtype input{};
     Board board;
     Snake snake{};
+    Spawner spawner;
     bool isValid{true};
     static void initSnakeGame();
     void initMisc();
 
     void moveSnake(chtype ch);
-    void validate();
+    void validate(BlockType bt);
+    void applyItemBlock(BlockType block);
 public:
 
     void awake(); // awake
@@ -23,6 +23,8 @@ public:
     void onDisable();
 
     void displayBoard();
+
+    void spawnItem();
 };
 
 void GameManager::awake()
@@ -39,7 +41,6 @@ void GameManager::awake()
     //init snake
     snake.awake();
 }
-
 
 void GameManager::initSnakeGame()
 {
@@ -65,57 +66,42 @@ void GameManager::initMisc()
     //set misc
     getmaxyx(stdscr, Misc::WIN_HEIGHT, Misc::WIN_WIDTH);
     Misc::DIMENSION = Misc::WIN_HEIGHT - 5;
-    Misc::SNAKE_START_XPOS = 10;
-    Misc::SNAKE_START_YPOS = 10;
 }
-
 
 int GameManager::update()
 {
     input = getch();
 
-    //handle input
     moveSnake(input);
 
-    //eat item
+    BlockType block = board.getMapData(snake.head->x, snake.head->y);
 
-    validate();
+    applyItemBlock(block);
+
     //check condition is valid or not
+    validate(block);
+
 
     //if valid then display and spawn item
     //spawn item and gate in valid position
     if (isValid)
     {
+        spawnItem();
         displayBoard();
     }
+
 
     return isValid;
 }
 
-void GameManager::displayBoard() {
-    board.clear();
-    WINDOW* window_map = board.getWinMap();
-
-    //print snake head
-    auto *p = snake.head;
-    wattron(window_map, COLOR_PAIR(1));
-    mvwaddch(window_map, p->y, p->x, ' ');
-    wattroff(window_map, COLOR_PAIR(1));
-    p = p->next;
-    //print snake body
-    while(p)
-    {
-        wattron(window_map, COLOR_PAIR(2));
-        mvwaddch(window_map, p->y, p->x, ' ');
-        wattroff(window_map, COLOR_PAIR(2));
-        p = p->next;
-    }
-
-    //TODO : print item
-    //TODO : print Gate
-    board.update();
+void GameManager::onDisable()
+{
+    board.onDisable();
+    nodelay(stdscr, false);
+    clear();
 }
 
+//handle input
 void GameManager::moveSnake(chtype ch) {
     switch (ch) {
         case KEY_DOWN:
@@ -145,7 +131,25 @@ void GameManager::moveSnake(chtype ch) {
     }
 }
 
-void GameManager::validate()
+void GameManager::applyItemBlock(BlockType block) {
+    if (block == BlockType::Growth)
+    {
+        snake.insert();
+        board.setMapData(snake.head->x, snake.head->y, Empty);
+    }
+    else if (block == BlockType::Poison)
+    {
+        snake.remove();
+        board.setMapData(snake.head->x, snake.head->y, Empty);
+    }
+    else if (block == BlockType::GateIn)
+    {
+        //TODO : get Gate Out position and Move snake head to that pos
+        //by inverting move direction
+    }
+}
+
+void GameManager::validate(BlockType bt)
 {
     if(!isValid)
         return;
@@ -154,7 +158,6 @@ void GameManager::validate()
     isValid = snake.isAlive();
 
     //check collision with wall and snake
-    BlockType bt = board.getMapData(snake.head->x, snake.head->y);
     switch (bt) {
         case Wall:
         case Conner:
@@ -170,9 +173,30 @@ void GameManager::validate()
     }
 }
 
-void GameManager::onDisable()
-{
-    board.onDisable();
-    nodelay(stdscr, false);
-    clear();
+void GameManager::displayBoard() {
+    board.clear();
+    WINDOW* window_map = board.getWinMap();
+
+    //print snake head
+    auto *p = snake.head;
+    wattron(window_map, COLOR_PAIR(1));
+    mvwaddch(window_map, p->y, p->x, ' ');
+    wattroff(window_map, COLOR_PAIR(1));
+    p = p->next;
+    //print snake body
+    while(p)
+    {
+        wattron(window_map, COLOR_PAIR(2));
+        mvwaddch(window_map, p->y, p->x, ' ');
+        wattroff(window_map, COLOR_PAIR(2));
+        p = p->next;
+    }
+
+    //TODO : print item
+    //TODO : print Gate
+    board.update();
+}
+
+void GameManager::spawnItem() {
+
 }
