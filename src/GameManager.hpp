@@ -1,28 +1,28 @@
 #pragma once
 
+#include <curses.h>
+
 class GameManager
 {
 private:
-    chtype ch{};
+    chtype input{};
     Board board;
     Snake snake{};
-
+    bool isValid{true};
     static void initSnakeGame();
     void initMisc();
-    
-//    GameCondition isValid() { return 1; }
-    
-//    GameManager()= default;
-//    GameManager(const GameManager& other){};
-//    ~GameManager()= default;
+
+    void moveSnake(chtype ch);
+    void validate();
 public:
-//    static GameManager& getInst() { static GameManager gm; return gm; }
 
     void awake(); // awake
 
     int update();
 
     void onDisable();
+
+    void displayBoard();
 };
 
 void GameManager::awake()
@@ -70,34 +70,25 @@ void GameManager::initMisc()
 
 int GameManager::update()
 {
-    ch = getch();
+    input = getch();
 
-    switch (ch) {
-        case KEY_DOWN:
-            if(snake.m_dir == MoveDir::Up)
-                return 0;
-            snake.move(MoveDir::Down);
-            break;
-        case KEY_UP:
-            if(snake.m_dir == MoveDir::Down)
-                return 0;
-            snake.move(MoveDir::Up);
-            break;
-        case KEY_RIGHT:
-            if(snake.m_dir == MoveDir::Left)
-                return 0;
-            snake.move(MoveDir::Right);
-            break;
-        case KEY_LEFT:
-            if(snake.m_dir == MoveDir::Right)
-                return 0;
-            snake.move(MoveDir::Left);
-            break;
-        case 'q':
-            return 0;
-        default:
-            snake.move(snake.m_dir);
-    }
+    //handle input
+    moveSnake(input);
+
+    //eat item
+
+    validate();
+    //check condition is valid or not
+
+    //if valid then display and spawn item
+    //spawn item and gate in valid position
+    if (isValid)
+        displayBoard();
+
+    return isValid;
+}
+
+void GameManager::displayBoard() {
     board.clear();
 
     auto *p = snake.head;
@@ -105,20 +96,67 @@ int GameManager::update()
     //Debug
     while(p)
     {
-        //wattron(board.getWinMap(), COLOR_PAIR(1));
+        wattron(board.getWinMap(), COLOR_PAIR(1));
         mvwprintw(board.getWinMap(), p->y, p->x, "X");
-//        wattroff(board.getWinMap(), COLOR_PAIR(1));
+        wattroff(board.getWinMap(), COLOR_PAIR(1));
         p = p->next;
     }
 
-    //TODO : consume item in map
-
-    //TODO : generate item from item spawner
-
-    //TODO : condition check
-
     board.update();
-    return 1;
+}
+
+void GameManager::moveSnake(chtype ch) {
+    switch (ch) {
+        case KEY_DOWN:
+            if(snake.m_dir == Up)
+                isValid = false;
+            snake.move(Down);
+            break;
+        case KEY_UP:
+            if(snake.m_dir == Down)
+                isValid = false;
+            snake.move(Up);
+            break;
+        case KEY_RIGHT:
+            if(snake.m_dir == Left)
+                isValid = false;
+            snake.move(Right);
+            break;
+        case KEY_LEFT:
+            if(snake.m_dir == Right)
+                isValid = false;
+            snake.move(Left);
+            break;
+        case 'q':
+            isValid = false;
+        default:
+            snake.move(snake.m_dir);
+    }
+}
+
+void GameManager::validate()
+{
+    if(!isValid)
+        return;
+
+    //check snake condition
+    isValid = snake.isAlive();
+
+    //check collision with wall and snake
+    BlockType bt = board.getMapData(snake.head->x, snake.head->y);
+    switch (bt) {
+        case Wall:
+        case Conner:
+            isValid = false;
+            break;
+#ifdef DEBUG
+        case Error:
+            printw("snake is placed over map");
+            break;
+#endif
+        default:
+            break;
+    }
 }
 
 void GameManager::onDisable()

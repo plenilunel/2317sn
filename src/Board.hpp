@@ -20,7 +20,7 @@ public:
 
     void clear();
     //아이템, 스네이크가 맵을 refresh할때 쓸 함수
-    void refreshMapData(int x, int y, BlockType bt);
+    BlockType getMapData(int x, int y);
 
     WINDOW*& getWinMap(){ return win_map; }
 };
@@ -100,19 +100,16 @@ void Board::printMap()
     }
 }
 
-void Board::refreshMapData(int x, int y, BlockType bt)
+BlockType Board::getMapData(int x, int y)
 {
     if(x < 0 || y < 0 || x > width || y > height)
     {
         //invalid condition check
         //throw
         printw("Out of Range [%d, %d]", x, y);
-        return;
+        return BlockType::Error;
     }
-    if(map == nullptr)
-    {
-        //init fail exception
-    }
-    map[y][x] = bt;
+
+    return (BlockType)map[y][x];
 }
 

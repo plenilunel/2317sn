@@ -94,5 +94,17 @@ void Snake::awake() {
 
 bool Snake::isAlive()
 {
-    return false;
+    if(snake_size < 3)
+        return false;
+
+    Body* p = head->next;
+
+    while(p)
+    {
+        if(p->x == head->x && p->y == head->y)
+            return false;
+        p = p->next;
+    }
+
+    return true;
 }
