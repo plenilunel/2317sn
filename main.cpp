@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include <csignal>
-#include <vector>
+#include <deque>
 
 using namespace std;
 

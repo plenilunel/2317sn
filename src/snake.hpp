@@ -19,6 +19,7 @@ public:
     // move snake to dir_x,y position
     void move(MoveDir moveDir);
     bool isAlive();
+    [[nodiscard]] bool isInSnake(const int& x, const int& y) const;
     void insert();
     void remove();
 };
@@ -114,4 +115,16 @@ void Snake::remove() {
     tail = tail->prev;
     delete p;
     snake_size--;
+}
+
+bool Snake::isInSnake(const int &x, const int &y) const
+{
+    Body *p = head;
+    while(p)
+    {
+        if(p->x == x && p->y == y)
+            return true;
+        p = p->next;
+    }
+    return false;
 }

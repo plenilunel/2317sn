@@ -13,7 +13,12 @@ private:
 
     void moveSnake(chtype ch);
     void validate(BlockType bt);
+
     void applyItemBlock(BlockType block);
+    void spawnItem();
+    void updateItemInfo();
+
+    void displayBoard();
 public:
 
     void awake(); // awake
@@ -22,9 +27,7 @@ public:
 
     void onDisable();
 
-    void displayBoard();
 
-    void spawnItem();
 };
 
 void GameManager::awake()
@@ -37,6 +40,8 @@ void GameManager::awake()
                 Misc::DIMENSION + Misc::DIMENSION/2,
                 (Misc::WIN_HEIGHT - Misc::DIMENSION) / 2,
                 (Misc::WIN_WIDTH - Misc::DIMENSION) / 2 - Misc::DIMENSION);
+
+    spawner.awake(Misc::DIMENSION,Misc::DIMENSION + Misc::DIMENSION/2);
 
     //init snake
     snake.awake();
@@ -52,13 +57,17 @@ void GameManager::initSnakeGame()
     keypad(stdscr, true); // 방향키 , F1 등 입력 받게 하기
     curs_set(0);
     start_color();
+    use_default_colors();
 
     init_pair(1, COLOR_YELLOW, COLOR_YELLOW); //snake head
     init_pair(2, COLOR_BLUE, COLOR_BLUE); // snake body
-    init_pair(3, COLOR_WHITE, COLOR_BLACK); // bg
-    init_pair(4, COLOR_WHITE, COLOR_WHITE); // wall and conner
-    init_pair(5, COLOR_GREEN, COLOR_WHITE); // gate in color
-    wbkgd(stdscr, COLOR_PAIR(3));
+    init_pair(3, COLOR_WHITE, COLOR_WHITE); // wall and conner
+    init_pair(4, COLOR_GREEN, COLOR_WHITE); // gate in color
+    init_pair(5, COLOR_RED, COLOR_WHITE); // gate out color
+    init_pair(6, COLOR_GREEN, COLOR_BLACK); // Growth Item Color
+
+    init_pair(10, COLOR_WHITE, COLOR_BLACK); // bg
+    wbkgd(stdscr, COLOR_PAIR(10));
 }
 
 void GameManager::initMisc()
@@ -81,15 +90,14 @@ int GameManager::update()
     //check condition is valid or not
     validate(block);
 
-
     //if valid then display and spawn item
     //spawn item and gate in valid position
     if (isValid)
     {
+        updateItemInfo();
         spawnItem();
         displayBoard();
     }
-
 
     return isValid;
 }
@@ -183,6 +191,7 @@ void GameManager::displayBoard() {
     mvwaddch(window_map, p->y, p->x, ' ');
     wattroff(window_map, COLOR_PAIR(1));
     p = p->next;
+
     //print snake body
     while(p)
     {
@@ -197,6 +206,36 @@ void GameManager::displayBoard() {
     board.update();
 }
 
-void GameManager::spawnItem() {
+void GameManager::updateItemInfo()
+{
+    spawner.update();
 
+    int rottenItemPos_x;
+    int rottenItemPos_y;
+    //한번에 두개 이상의 아이템이 사라질 수 없음. (respectively)
+    if (spawner.getRottenGrowth(rottenItemPos_x, rottenItemPos_y))
+        board.setMapData(rottenItemPos_x, rottenItemPos_y, Empty);
+
+    //TODO : do same thing on poison , gate ...
+
+
+}
+
+void GameManager::spawnItem() {
+    int x, y;
+
+    if(spawner.canSpawn(BlockType::Growth))
+    {
+        do {
+            spawner.getRandomPosition(x, y);
+        }while(board.getMapData(x,y) != BlockType::Empty || snake.isInSnake(x,y));
+
+        spawner.spawnGrowthItem(x, y);
+        board.setMapData(x, y, Growth);
+    }
+
+    if(spawner.canSpawn(BlockType::Poison))
+    {
+
+    }
 }

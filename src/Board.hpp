@@ -11,7 +11,6 @@ private:
     void buildMap(int stage = 1);
     void printMap();
 public:
-
     void awake(int h, int w, int starty, int startx);
 
     void update();
@@ -75,7 +74,8 @@ void Board::buildMap(int stage_idx) {
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
     //TODO: finish debugging
-    map[0][3] = map[height - 1][7] = BlockType::GateIn;
+    map[0][3] = BlockType::GateIn;
+    map[height - 1][7] = BlockType::GateOut;
 }
 
 void Board::printMap()
@@ -85,17 +85,29 @@ void Board::printMap()
     {
         for(int j = 0; j < width; j++)
         {
-            if(map[i][j] == BlockType::GateIn)
+            if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall)
             {
-                wattron(win_map, COLOR_PAIR(5));
-                mvwaddch(win_map, i, j, 'O');
-                wattroff(win_map , COLOR_PAIR(5));
-            }
-            else if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall)
-            {
-                wattron(win_map, COLOR_PAIR(4));
+                wattron(win_map, COLOR_PAIR(3));
                 mvwaddch(win_map, i, j, ' ');
-                wattroff(win_map , COLOR_PAIR(4));
+                wattroff(win_map , COLOR_PAIR(3));
+            }
+            else if (map[i][j] == BlockType::GateIn)
+            {
+                wattron(win_map, COLOR_PAIR(4) | A_BLINK);
+                mvwaddch(win_map, i, j, 'O');
+                wattroff(win_map , COLOR_PAIR(4)| A_BLINK);
+            }
+            else if (map[i][j] == BlockType::GateOut)
+            {
+                wattron(win_map, COLOR_PAIR(5) | A_BLINK);
+                mvwaddch(win_map, i, j, 'O');
+                wattroff(win_map , COLOR_PAIR(5)| A_BLINK);
+            }
+            else if(map[i][j] == BlockType::Growth)
+            {
+                wattron(win_map, COLOR_PAIR(6) | A_VERTICAL | A_BOLD | A_BLINK);
+                mvwaddch(win_map, i, j, 'G');
+                wattroff(win_map , COLOR_PAIR(6) | A_VERTICAL | A_BOLD | A_BLINK);
             }
         }
     }
@@ -107,7 +119,8 @@ BlockType Board::getMapData(int x, int y)
     {
         //invalid condition check
         //throw
-        printw("Out of Range [%d, %d]", x, y);
+        printw("Get Out of Range [%d, %d]", x, y);
+        printw("<%d, %d>", width, height);
         return BlockType::Error;
     }
 
@@ -120,7 +133,7 @@ void Board::setMapData(int x, int y, BlockType block)
     {
         //invalid condition check
         //throw
-        printw("Out of Range [%d, %d]", x, y);
+        printw("Set Out of Range [%d, %d]", x, y);
         return;
     }
 
