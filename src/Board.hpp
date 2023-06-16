@@ -35,7 +35,7 @@ void Board::awake(int h, int w, int starty, int startx)
 
     buildMap();
 }
-//TODO: map 배열에 저장된 snake, item, gate 정보를 받아서 업데이트 한 후 출력하는 역할
+
 void Board::update()
 {
     printMap();
@@ -73,7 +73,6 @@ void Board::buildMap(int stage_idx) {
 
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-    //TODO: finish debugging
     map[0][3] = BlockType::GateIn;
     map[height - 1][7] = BlockType::GateOut;
 }
@@ -117,10 +116,7 @@ BlockType Board::getMapData(int x, int y)
 {
     if(x < 0 || y < 0 || x > width || y > height)
     {
-        //invalid condition check
-        //throw
         printw("Get Out of Range [%d, %d]", x, y);
-        printw("<%d, %d>", width, height);
         return BlockType::Error;
     }
 
@@ -131,8 +127,6 @@ void Board::setMapData(int x, int y, BlockType block)
 {
     if(x < 0 || y < 0 || x > width || y > height)
     {
-        //invalid condition check
-        //throw
         printw("Set Out of Range [%d, %d]", x, y);
         return;
     }

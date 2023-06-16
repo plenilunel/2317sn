@@ -201,8 +201,6 @@ void GameManager::displayBoard() {
         p = p->next;
     }
 
-    //TODO : print item
-    //TODO : print Gate
     board.update();
 }
 
