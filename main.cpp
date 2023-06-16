@@ -27,7 +27,7 @@ int main()
 
         if(game_condition == 0)
             break;
-        usleep(110000);
+        usleep(140000);
     }
 
     gm.onDisable();

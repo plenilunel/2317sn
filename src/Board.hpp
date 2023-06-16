@@ -22,7 +22,7 @@ public:
     //아이템, 스네이크가 맵을 refresh할때 쓸 함수
     BlockType getMapData(int x, int y);
 
-    WINDOW*& getWinMap(){ return win_map; }
+    WINDOW*& getWinMap() { return win_map; }
 };
 
 void Board::awake(int h, int w, int starty, int startx)
@@ -86,15 +86,15 @@ void Board::printMap()
         {
             if(map[i][j] == BlockType::GateIn)
             {
-                //wattr_on(win_map, COLOR_PAIR(1));
-                mvwprintw(win_map, i, j, "O");
-                //wattr_off(win_map, COLOR_PAIR(1));
+                wattron(win_map, COLOR_PAIR(5));
+                mvwaddch(win_map, i, j, 'O');
+                wattroff(win_map , COLOR_PAIR(5));
             }
-            else if(map[i][j] == BlockType::Conner)
+            else if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall)
             {
-                wattron(win_map, COLOR_PAIR(2));
-                mvwprintw(win_map, i, j, "C");
-                wattroff(win_map , COLOR_PAIR(2));
+                wattron(win_map, COLOR_PAIR(4));
+                mvwaddch(win_map, i, j, ' ');
+                wattroff(win_map , COLOR_PAIR(4));
             }
         }
     }
