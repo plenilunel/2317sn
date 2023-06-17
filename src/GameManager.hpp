@@ -19,6 +19,8 @@ private:
     void spawnItem();
     void updateItemInfo();
 
+    void updateScoreInfo();
+
     void displayBoard();
     void displayScore();
 public:
@@ -28,8 +30,6 @@ public:
     int update();
 
     void onDisable();
-
-
 };
 
 void GameManager::awake()
@@ -98,10 +98,9 @@ int GameManager::update()
     //check condition is valid or not
     validate(block);
 
-    //if valid then display and spawn item
-    //spawn item and gate in valid position
     if (isValid)
     {
+        updateScoreInfo();
         updateItemInfo();
         spawnItem();
         displayScore();
@@ -151,18 +150,19 @@ void GameManager::moveSnake(chtype ch) {
 void GameManager::applyItemBlock(BlockType block) {
     if (block == BlockType::Growth)
     {
+        score.addGrowthScore();
         snake.insert();
         board.setMapData(snake.head->x, snake.head->y, Empty);
     }
     else if (block == BlockType::Poison)
     {
+        score.addPoisonScore();
         snake.remove();
         board.setMapData(snake.head->x, snake.head->y, Empty);
     }
     else if (block == BlockType::GateIn)
     {
-        //TODO : get Gate Out position and Move snake head to that pos
-        //by inverting move direction
+        score.addGateScore();
         spawner.setGateActive(snake._size);
 
 
@@ -171,7 +171,6 @@ void GameManager::applyItemBlock(BlockType block) {
         do {
             spawner.getGateDestination(destX, destY, static_cast<MoveDir>((snake.m_dir + i) % 4), i++ == 0);
         }while(i < 4 && board.getMapData(destX, destY) == BlockType::Wall);
-
 
         snake.m_dir = spawner.getGate().out_dir;
         snake.move(destX, destY);
@@ -249,7 +248,12 @@ void GameManager::updateItemInfo()
         board.setMapData(tmp.x, tmp.y, BlockType::Wall);
         board.setMapData(tmp.out_x, tmp.out_y, BlockType::Wall);
     }
+}
 
+void GameManager::updateScoreInfo() {
+    score.addTime();
+    score.setSnakePos(snake.head->x, snake.head->y);
+    score.setSnakeSize(snake._size);
 }
 
 void GameManager::spawnItem() {
@@ -294,3 +298,4 @@ void GameManager::spawnItem() {
         spawner.spawnGate(x, y, x2, y2);
     }
 }
+

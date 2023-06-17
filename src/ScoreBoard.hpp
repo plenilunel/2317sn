@@ -19,7 +19,7 @@ private:
     int growth_score{};
     int poison_score{};
     int total_score{};
-    int time{};
+    double time{};
     void updateScoreWin();
     void calcTotal_Score();
 public:
@@ -30,6 +30,13 @@ public:
     void onDisable();
 
     void clear();
+
+    void setSnakePos(int x, int y);
+    void setSnakeSize(int size);
+    void addGateScore(int amount = 1);
+    void addGrowthScore(int amount = 1);
+    void addPoisonScore(int amount = 1);
+    void addTime();
 };
 
 void ScoreBoard::awake(int h, int w, int starty, int startx) {
@@ -67,15 +74,17 @@ void ScoreBoard::updateScoreWin() {
 
     wattron(score_win, A_DIM);
 
-    wattron(score_win, A_BLINK);
     mvwprintw(score_win, 1, 3, "Snake Head Position <%d, %d>", snake_pos_x, snake_pos_y);
+    wattron(score_win, A_BLINK);
+    mvwprintw(score_win, 2, 3, "Current Snake Size [%d]", snake_size);
     wattroff(score_win, A_BLINK);
 
-    mvwprintw(score_win,2, 3,"Score : %d", total_score);
+    mvwprintw(score_win,3, 3,"Score : %d", total_score);
 
-    mvwprintw(score_win,3, 3,"Gate_Count : %d", gate_score);
-    mvwprintw(score_win,4, 3,"Growth_Count : %d", growth_score);
-    mvwprintw(score_win,5, 3,"Poison_Count : %d", poison_score);
+    mvwprintw(score_win,4, 3,"Gate_Count : %d", gate_score);
+    mvwprintw(score_win,5, 3,"Growth_Count : %d", growth_score);
+    mvwprintw(score_win,6, 3,"Poison_Count : %d", poison_score);
+    mvwprintw(score_win,7, 3,"Time : %d min %d sec", (int)time/60, (int)time%60);
     wattroff(score_win, A_DIM);
     wrefresh(score_win);
 }
@@ -87,6 +96,31 @@ void ScoreBoard::calcTotal_Score() {
             poison_score*100 +
             time;
 
+}
+
+void ScoreBoard::setSnakePos(int x, int y) {
+    snake_pos_x = x;
+    snake_pos_y = y;
+}
+
+void ScoreBoard::setSnakeSize(int size) {
+    snake_size = size;
+}
+
+void ScoreBoard::addGateScore(int amount) {
+    gate_score += amount;
+}
+
+void ScoreBoard::addGrowthScore(int amount) {
+    growth_score += amount;
+}
+
+void ScoreBoard::addPoisonScore(int amount) {
+    poison_score += amount;
+}
+
+void ScoreBoard::addTime() {
+    time+=0.5;
 }
 
 #endif //SNAKE_SCOREHANDLER_H
