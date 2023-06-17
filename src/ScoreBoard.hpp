@@ -20,10 +20,27 @@ private:
     int growth_score{};
     int poison_score{};
     int total_score{};
+    int stage{1};
 
+    void printStage1();
     char stage1_mission1{'X'};
     char stage1_mission2{'X'};
     char stage1_mission3{'X'};
+
+    void printStage2();
+    char stage2_mission1{'X'};
+    char stage2_mission2{'X'};
+    char stage2_mission3{'X'};
+
+    void printStage3();
+    char stage3_mission1{'X'};
+    char stage3_mission2{'X'};
+    char stage3_mission3{'X'};
+
+    void printStage4();
+    char stage4_mission1{'X'};
+    char stage4_mission2{'X'};
+    char stage4_mission3{'X'};
 
     long time{};
     chrono::time_point<chrono::steady_clock> start_time{};
@@ -32,6 +49,8 @@ private:
     void calcTotal_Score();
 
     void updateMissionWin();
+
+    static bool isMissionComplete(char& m1, char& m2, char& m3);
 public:
     void awake(int h, int w, int starty, int startx);
 
@@ -40,6 +59,9 @@ public:
     void onDisable();
 
     void clear();
+
+    [[nodiscard]] int getCurrStage() const {return stage;}
+    void checkMissionCondition();
 
     void setSnakePos(int x, int y);
     void setSnakeSize(int size);
@@ -87,9 +109,7 @@ void ScoreBoard::updateScoreWin() {
     wattron(score_win, A_DIM);
 
     mvwprintw(score_win, 1, 3, "Snake Head Position <%d, %d>", snake_pos_x, snake_pos_y);
-    wattron(score_win, A_BLINK);
     mvwprintw(score_win, 2, 3, "Current Snake Size [%d]", snake_size);
-    wattroff(score_win, A_BLINK);
 
     mvwprintw(score_win,3, 3,"Score : %d", total_score);
     mvwprintw(score_win,4, 3,"Gate_Count : %d", gate_score);
@@ -139,13 +159,81 @@ void ScoreBoard::updateMissionWin() {
     wborder(mission_win, '|', '|', '-', '-', '+', '+', '+', '+');
 
     wattron(mission_win, A_DIM);
-    mvwprintw(mission_win, 1, 3, "<Mission list>");
-    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item                 ( %c )", stage1_mission1);
-    mvwprintw(mission_win, 3, 3, "2. Alive 60 seconds                     ( %c )", stage1_mission2);
-    mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than One times ( %c )", stage1_mission3);
+
+    wattron(mission_win, A_ITALIC);
+    mvwprintw(mission_win, 1, 3, "               <Mission list>");
+    wattroff(mission_win, A_ITALIC);
+
+    switch (stage) {
+        case 1:
+            printStage1();
+            break;
+        case 2:
+            printStage2();
+            break;
+        case 3:
+            printStage3();
+            break;
+        case 4:
+            printStage4();
+            break;
+        default:
+            break;
+    }
+
     wattroff(mission_win, A_DIM);
 
     wrefresh(mission_win);
+}
+
+void ScoreBoard::printStage1() {
+    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item                   ( %c )", stage1_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Avoid collision with walls 60 seconds  ( %c )", stage1_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than Once        ( %c )", stage1_mission3);
+}
+
+void ScoreBoard::printStage2() {
+    mvwprintw(mission_win, 2, 3, "1. Obtain 9 Growth item                   ( %c )", stage2_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item without death     ( %c )", stage2_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than Twice       ( %c )", stage2_mission3);
+}
+
+void ScoreBoard::printStage3() {
+    mvwprintw(mission_win, 2, 3, "1. Obtain 9 Growth item                   ( %c )", stage3_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item without death     ( %c )", stage3_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than Twice       ( %c )", stage3_mission3);
+}
+
+void ScoreBoard::printStage4() {
+    mvwprintw(mission_win, 2, 3, "1. Obtain 15 Poison item without death    ( %c )", stage4_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Avoid collision with walls by 3 min    ( %c )", stage4_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than Third time  ( %c )", stage4_mission3);
+}
+
+void ScoreBoard::checkMissionCondition() {
+    switch (stage) {
+        case 1:
+            if (growth_score > 3)
+                stage1_mission1 = 'O';
+            if (time > 60)
+                stage1_mission2 = 'O';
+            if (gate_score > 0)
+                stage1_mission3 = 'O';
+
+            if(isMissionComplete(stage1_mission1, stage1_mission2, stage1_mission3))
+                stage = 2;
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+    }
+}
+bool ScoreBoard::isMissionComplete(char& m1, char& m2, char& m3)
+{
+    return (m1 == 'O') && (m2 == 'O') && (m3 == 'O');
 }
 
 #endif //SNAKE_SCOREHANDLER_H

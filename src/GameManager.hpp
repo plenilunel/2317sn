@@ -9,6 +9,8 @@ private:
     Snake snake{};
     Spawner spawner;
     bool isValid{true};
+    int curr_stage{1};
+
     static void initSnakeGame();
     void initMisc();
 
@@ -105,6 +107,11 @@ int GameManager::update()
         spawnItem();
         displayScore();
         displayBoard();
+
+        if(curr_stage != score.getCurrStage())
+        {
+            printw("MOVE TO NEXT STAGE");
+        }
     }
 
     return isValid;
@@ -255,6 +262,7 @@ void GameManager::updateScoreInfo() {
     score.updateTime();
     score.setSnakePos(snake.head->x, snake.head->y);
     score.setSnakeSize(snake._size);
+    score.checkMissionCondition();
 }
 
 void GameManager::spawnItem() {
