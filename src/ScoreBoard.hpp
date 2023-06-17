@@ -140,7 +140,7 @@ void ScoreBoard::updateMissionWin() {
 
     wattron(mission_win, A_DIM);
     mvwprintw(mission_win, 1, 3, "<Mission list>");
-    mvwprintw(mission_win, 2, 3, "1. Obtain 3 or more Growth item         ( %c )", stage1_mission1);
+    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item                 ( %c )", stage1_mission1);
     mvwprintw(mission_win, 3, 3, "2. Alive 60 seconds                     ( %c )", stage1_mission2);
     mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than One times ( %c )", stage1_mission3);
     wattroff(mission_win, A_DIM);
