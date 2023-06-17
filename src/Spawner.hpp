@@ -57,7 +57,7 @@ public:
     void spawnGate(int inX, int inY, int outX, int outY);
     bool getRottenGate(Gate& result);
     void setGateActive(int second);
-    void setGateDestination(int& destX, int& destY, MoveDir moveDir);
+    void getGateDestination(int& destX, int& destY, MoveDir moveDir, int notFirst);
     Gate& getGate();
 
     [[nodiscard]] bool canSpawn(BlockType block) const;
@@ -229,7 +229,7 @@ void Spawner::setGateActive(int second) {
     gate.active = true;
 }
 
-void Spawner::setGateDestination(int &destX, int &destY, MoveDir moveDir) {
+void Spawner::getGateDestination(int &destX, int &destY, MoveDir moveDir, int notFirst) {
     if(gate.fixed)
     {
         destY = gate.dest_y;
@@ -241,22 +241,22 @@ void Spawner::setGateDestination(int &destX, int &destY, MoveDir moveDir) {
         case Left:
             destY = gate.out_y;
             destX = gate.out_x-1;
-            gate.out_dir = Right;
+            gate.out_dir = Left;
             break;
         case Right:
             destY = gate.out_y;
-            destX = gate.out_x+1;
-            gate.out_dir = Left;
+            destX = gate.out_x + 1;
+            gate.out_dir = Right;
             break;
         case Up:
-            destY = gate.out_y + 1;
-            destX = gate.out_x;
-            gate.out_dir = Down;
-            break;
-        case Down:
             destY = gate.out_y - 1;
             destX = gate.out_x;
             gate.out_dir = Up;
+            break;
+        case Down:
+            destY = gate.out_y + 1;
+            destX = gate.out_x;
+            gate.out_dir = Down;
             break;
     }
 }

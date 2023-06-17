@@ -18,11 +18,10 @@ public:
     void onDisable();
 
     void clear();
-    //아이템, 스네이크가 맵을 refresh할때 쓸 함수
+
     BlockType getMapData(int x, int y);
     void setMapData(int x, int y, BlockType block);
     WINDOW*& getWinMap() { return win_map; }
-
 };
 
 void Board::awake(int h, int w, int starty, int startx)

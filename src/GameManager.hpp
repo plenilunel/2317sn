@@ -5,6 +5,7 @@ class GameManager
 private:
     chtype input{};
     Board board;
+    ScoreBoard score;
     Snake snake{};
     Spawner spawner;
     bool isValid{true};
@@ -19,6 +20,7 @@ private:
     void updateItemInfo();
 
     void displayBoard();
+    void displayScore();
 public:
 
     void awake(); // awake
@@ -39,7 +41,12 @@ void GameManager::awake()
     board.awake(Misc::DIMENSION,
                 Misc::DIMENSION + Misc::DIMENSION/2,
                 (Misc::WIN_HEIGHT - Misc::DIMENSION) / 2,
-                (Misc::WIN_WIDTH - Misc::DIMENSION) / 2 - Misc::DIMENSION);
+                (Misc::WIN_WIDTH - Misc::DIMENSION) / 2 - Misc::DIMENSION - Misc::DIMENSION/4);
+
+    score.awake(Misc::DIMENSION/2,
+                (Misc::DIMENSION + Misc::DIMENSION/2),
+                (Misc::WIN_HEIGHT - Misc::DIMENSION) / 2 + 5,
+                (Misc::WIN_WIDTH - Misc::DIMENSION) / 2 + Misc::DIMENSION/3);
 
     spawner.awake(Misc::DIMENSION,Misc::DIMENSION + Misc::DIMENSION/2);
 
@@ -97,6 +104,7 @@ int GameManager::update()
     {
         updateItemInfo();
         spawnItem();
+        displayScore();
         displayBoard();
     }
 
@@ -157,11 +165,13 @@ void GameManager::applyItemBlock(BlockType block) {
         //by inverting move direction
         spawner.setGateActive(snake._size);
 
+
         int destX, destY;
         int i = 0;
         do {
-            spawner.setGateDestination(destX, destY, static_cast<MoveDir>((snake.m_dir + i++) % 4));
-        }while(i <= 4 && board.getMapData(destX, destY) == BlockType::Wall);
+            spawner.getGateDestination(destX, destY, static_cast<MoveDir>((snake.m_dir + i) % 4), i++ == 0);
+        }while(i < 4 && board.getMapData(destX, destY) == BlockType::Wall);
+
 
         snake.m_dir = spawner.getGate().out_dir;
         snake.move(destX, destY);
@@ -216,6 +226,10 @@ void GameManager::displayBoard() {
     board.update();
 }
 
+void GameManager::displayScore() {
+    score.clear();
+    score.update();
+}
 void GameManager::updateItemInfo()
 {
     spawner.update();
