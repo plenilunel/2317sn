@@ -155,6 +155,7 @@ void GameManager::applyItemBlock(BlockType block) {
     {
         //TODO : get Gate Out position and Move snake head to that pos
         //by inverting move direction
+
     }
 }
 
@@ -218,7 +219,7 @@ void GameManager::updateItemInfo()
     if(spawner.getRottenPoison(rottenItemPos_x, rottenItemPos_y))
         board.setMapData(rottenItemPos_x, rottenItemPos_y, Empty);
 
-    //TODO : do same thing on poison , gate ...
+
 
 
 }
@@ -244,5 +245,24 @@ void GameManager::spawnItem() {
 
         spawner.spawnPoisonItem(x, y);
         board.setMapData(x, y, Poison);
+    }
+
+    if(spawner.canSpawn(BlockType::GateIn))
+    {
+        int x2, y2;
+
+        do {
+            spawner.getRandomPosition(x, y);
+        }while(board.getMapData(x,y) != BlockType::Wall);
+
+        board.setMapData(x, y, GateIn);
+
+        do {
+            spawner.getRandomPosition(x2, y2);
+        }while(board.getMapData(x2,y2) != BlockType::Wall);
+
+        board.setMapData(x2, y2, GateOut);
+
+        spawner.spawnGate(x, y, x2, y2);
     }
 }

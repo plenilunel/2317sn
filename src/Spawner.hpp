@@ -15,6 +15,16 @@ struct Item{
 
     int x, y, life;
 };
+
+struct Gate : Item{
+
+    int out_x;
+    int out_y;
+    MoveDir in_dir;
+    MoveDir out_dir;
+    bool fixed;
+};
+
     int range_x;
     int range_y;
 
@@ -25,6 +35,9 @@ struct Item{
     int poison_cnt;
     int poison_spawn_timer;
     deque<Item> poison_items;
+
+    bool canGateSpawn;
+    Gate gate;
 
 public:
     void awake(int, int);
@@ -38,22 +51,26 @@ public:
     void spawnPoisonItem(int x, int y);
     bool getRottenPoison(int& rotten_x, int& rotten_y);
 
+    void spawnGate(int in_x, int in_y, int outX, int outY);
+
     [[nodiscard]] bool canSpawn(BlockType block) const;
 };
 
 void Spawner::awake(int height, int width) {
     srand(time(NULL));
 
-    range_x = width - 2;
-    range_y = height - 2;
+    range_x = width;
+    range_y = height;
 
-    growth_cnt = poison_cnt = growth_spawn_timer = poison_spawn_timer = 0;
+    growth_cnt = growth_spawn_timer = 0;
+    poison_cnt = poison_spawn_timer = 0;
+    canGateSpawn = true;
 }
 
 void Spawner::getRandomPosition(int &x, int &y) const
 {
-    x = rand() % range_x + 1;
-    y = rand() % range_y + 1;
+    x = rand() % range_x;
+    y = rand() % range_y;
 }
 
 void Spawner::update() {
@@ -70,6 +87,10 @@ void Spawner::update() {
     {
         for(auto & item : poison_items)
             item.life--;
+    }
+    if(gate.life > 0)
+    {
+        gate.life--;
     }
 }
 
@@ -98,7 +119,9 @@ bool Spawner::canSpawn(BlockType block) const {
             if (poison_spawn_timer > 0 || poison_cnt >= Misc::POISON_MAX_COUNT)
                 return false;
             break;
+        case GateIn:
 
+            break;
         //TODO : case gate
         default:
             break;
@@ -136,4 +159,23 @@ bool Spawner::getRottenPoison(int &rotten_x, int &rotten_y) {
     }
 
     return false;
+}
+
+void Spawner::spawnGate(int in_x, int in_y, int outX, int outY) {
+    gate.x = in_x;
+    gate.y = in_y;
+
+    gate.out_x = outX;
+    gate.out_y = outY;
+
+    gate.fixed = false;
+    //TODO : 생성확인
+    //TODO : 기능구현
+
+    if(outX == 0) // in left wall
+    {
+        gate.fixed = true;
+        gate.out_dir = MoveDir::Right;
+        gate.out_x = 1;
+    }
 }

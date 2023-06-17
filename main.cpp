@@ -6,7 +6,6 @@ using namespace std;
 
 #define DEBUG
 
-#include "src/Stage.hpp"
 #include "src/Misc.hpp"
 #include "src/Board.hpp"
 #include "src/snake.hpp"

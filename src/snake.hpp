@@ -9,15 +9,18 @@ private:
         Body *next;
         Body *prev;
     };
+
 public:
     Body *head;
     Body *tail;
-    int snake_size;
     MoveDir m_dir{Right};
+    int snake_size;
     //TODO : insert, refresh to map function
     void awake();
     // move snake to dir_x,y position
     void move(MoveDir moveDir);
+    void move(int destX, int destY) const;
+
     bool isAlive() const;
     [[nodiscard]] bool isInSnake(const int& x, const int& y) const;
     void insert();
@@ -69,6 +72,11 @@ void Snake::move(MoveDir moveDir) {
             head->x -= 1;
             break;
     }
+}
+
+void Snake::move(int destX, int destY) const {
+    head->x = destX;
+    head->y = destY;
 }
 
 void Snake::insert() {

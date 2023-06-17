@@ -73,8 +73,9 @@ void Board::buildMap(int stage_idx) {
 
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-    map[0][3] = BlockType::GateIn;
-    map[height - 1][7] = BlockType::GateOut;
+// 스테이지 만드는 문법
+//    map[0][3] = BlockType::GateIn;
+//    map[height - 1][7] = BlockType::GateOut;
 }
 
 void Board::printMap()
