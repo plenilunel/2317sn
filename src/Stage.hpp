@@ -10,7 +10,7 @@
 
 //example
 int exam_map[DIM_Y][DIM_X];
-void stage1()
+void stage1(int )
 {
     //가운데 십자 벽
     
@@ -38,34 +38,34 @@ void stage1()
     exam_map[stage1_x_point][stage1_y_point] = BlockType::Conner;
 }
 
-void stage2()
+void stage2(int height, int width)
 {
     // ㄱ, ㄴ 벽
     
-    int stage2_x_point = DIM_Y / 2;
-    int stage2_y_point = DIM_X / 2;
+    int stage2_x_point = height / 2;
+    int stage2_y_point = width / 2;
 
-    if(DIM_Y % 2 == 0) {
+    if(height % 2 == 0) {
         stage2_x_point--;
     }
-    if(DIM_X % 2 == 0) {
+    if(width % 2 == 0) {
         stage2_y_point--;
     }
 
     //ㄴ 모양 벽 생성
     for(int i=stage2_x_point; i<stage2_x_point+10; i++){
-        exam_map[i][9] = BlockType::Wall;
+        map[i][9] = BlockType::Wall;
     }
     for(int i=9; i<20; i++){
-        exam_map[stage2_x_point+9][i] = BlockType::Wall;
+        map[stage2_x_point+9][i] = BlockType::Wall;
     }
 
     //ㄱ 모양 벽 생성
     for(int i=stage2_x_point; i>stage2_x_point-10; i--){
-        exam_map[i][DIM_X-9] = BlockType::Wall;
+        map[i][width-9] = BlockType::Wall;
     }
-    for(int i=DIM_X-9; i>DIM_X-20; i--){
-        exam_map[stage2_x_point-9][i] = BlockType::Wall;
+    for(int i=width-9; i>width-20; i--){
+        map[stage2_x_point-9][i] = BlockType::Wall;
     }
 }
 

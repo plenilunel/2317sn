@@ -82,36 +82,36 @@ void Board::buildMap(int stage_idx) {
 //            break;
 //
 //    }
-    int stage2_x_point = height / 2;
-    int stage2_y_point = width / 2;
+    //4분할 벽
 
-    if(height % 2 == 0) {
-        stage2_x_point--;
-    }
-    if(width % 2 == 0) {
-        stage2_y_point--;
-    }
+    int stage3_x_point = height / 2;
+    int stage3_y_point = width / 2;
+//
+//    if(height % 2 == 0){
+//        stage3_x_point--;
+//    }
+//    if(width % 2 == 0){
+//        stage3_y_point--;
+//    }
 
-    //ㄴ 모양 벽 생성
-    for(int i=stage2_x_point; i<stage2_x_point+10; i++){
-        map[i][9] = BlockType::Wall;
-    }
-    for(int i=9; i<20; i++){
-        map[stage2_x_point+9][i] = BlockType::Wall;
-    }
-
-    //ㄱ 모양 벽 생성
-    for(int i=stage2_x_point; i>stage2_x_point-10; i--){
-        map[i][width-9] = BlockType::Wall;
-    }
-    for(int i=width-9; i>width-20; i--){
-        map[stage2_x_point-9][i] = BlockType::Wall;
+    //세로 벽을 만드는 반복문
+    for(int i=1; i<height-1; i++){
+        map[i][stage3_y_point] = BlockType::Wall;
     }
 
+    //가로 벽을 만드는 반복문
+    for(int i=1; i<width-1; i++){
+        map[stage3_x_point][i] = BlockType::Wall;
+    }
 
+    //배열 중앙의 값은 Corner이어야 한다.
+    map[stage3_x_point][stage3_y_point] = BlockType::Conner;
 
-
-
+    //
+    map[0][stage3_y_point] = BlockType::Conner;
+    map[height-1][stage3_y_point] = BlockType::Conner;
+    map[stage3_x_point][0] = BlockType::Conner;
+    map[stage3_x_point][width-1] = BlockType::Conner;
     //ㄴ 코너 만들기
 //    for (int i = height/3; i <= height - height/2; i++)
 //        map[i][width/3] = BlockType::Wall;
