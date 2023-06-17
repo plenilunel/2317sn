@@ -72,12 +72,52 @@ void Board::buildMap(int stage_idx) {
 
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-    //ㄴ 코너 만들기
-    for (int i = height/3; i <= height - height/2; i++)
-        map[i][width/3] = BlockType::Wall;
+//    switch (stage_idx) {
+//        case 1:
+//            break;
+//        case 2:
+//
+//            break;
+//        case 3:
+//            break;
+//
+//    }
+    int stage2_x_point = height / 2;
+    int stage2_y_point = width / 2;
 
-    for (int i = width/3; i <= width - width/2; i++)
-        map[height - height/2][i] = BlockType::Wall;
+    if(height % 2 == 0) {
+        stage2_x_point--;
+    }
+    if(width % 2 == 0) {
+        stage2_y_point--;
+    }
+
+    //ㄴ 모양 벽 생성
+    for(int i=stage2_x_point; i<stage2_x_point+10; i++){
+        map[i][9] = BlockType::Wall;
+    }
+    for(int i=9; i<20; i++){
+        map[stage2_x_point+9][i] = BlockType::Wall;
+    }
+
+    //ㄱ 모양 벽 생성
+    for(int i=stage2_x_point; i>stage2_x_point-10; i--){
+        map[i][width-9] = BlockType::Wall;
+    }
+    for(int i=width-9; i>width-20; i--){
+        map[stage2_x_point-9][i] = BlockType::Wall;
+    }
+
+
+
+
+
+    //ㄴ 코너 만들기
+//    for (int i = height/3; i <= height - height/2; i++)
+//        map[i][width/3] = BlockType::Wall;
+//
+//    for (int i = width/3; i <= width - width/2; i++)
+//        map[height - height/2][i] = BlockType::Wall;
 
 }
 

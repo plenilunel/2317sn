@@ -188,7 +188,7 @@ void ScoreBoard::updateMissionWin() {
 
 void ScoreBoard::printStage1() {
     mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item                   ( %c )", stage1_mission1);
-    mvwprintw(mission_win, 3, 3, "2. Avoid collision with walls 60 seconds  ( %c )", stage1_mission2);
+    mvwprintw(mission_win, 3, 3, "2. Avoid collision with walls 30 seconds  ( %c )", stage1_mission2);
     mvwprintw(mission_win, 4, 3, "3. Passthrough Gate more than Once        ( %c )", stage1_mission3);
 }
 
@@ -215,7 +215,7 @@ void ScoreBoard::checkMissionCondition() {
         case 1:
             if (growth_score > 3)
                 stage1_mission1 = 'O';
-            if (time > 60)
+            if (time > 30)
                 stage1_mission2 = 'O';
             if (gate_score > 0)
                 stage1_mission3 = 'O';
