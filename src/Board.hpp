@@ -73,9 +73,13 @@ void Board::buildMap(int stage_idx) {
 
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-// 스테이지 만드는 문법
-//    map[0][3] = BlockType::GateIn;
-//    map[height - 1][7] = BlockType::GateOut;
+    map[10][10] = BlockType::Wall;
+    map[11][10] = BlockType::Wall;
+    map[12][10] = BlockType::Wall;
+    map[13][10] = BlockType::Wall;
+    map[14][10] = BlockType::Wall;
+    map[15][10] = BlockType::Wall;
+
 }
 
 void Board::printMap()
@@ -84,17 +88,17 @@ void Board::printMap()
     {
         for(int j = 0; j < width; j++)
         {
-            if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall)
+            if(map[i][j] == BlockType::Wall) // map[i][j] == BlockType::Conner ||
             {
-//                wattron(win_map, COLOR_PAIR(3));
-//                mvwaddch(win_map, i, j, ' ');
-//                wattroff(win_map , COLOR_PAIR(3));
+                wattron(win_map, COLOR_PAIR(3));
+                mvwaddch(win_map, i, j, ' ');
+                wattroff(win_map , COLOR_PAIR(3));
             }
             else if (map[i][j] == BlockType::GateIn)
             {
-                wattron(win_map, COLOR_PAIR(4) | A_UNDERLINE | A_HORIZONTAL | A_BOLD);
+                wattron(win_map, COLOR_PAIR(4) | A_UNDERLINE | A_BOLD);
                 mvwaddch(win_map, i, j, 'O');
-                wattroff(win_map , COLOR_PAIR(4)| A_UNDERLINE| A_HORIZONTAL | A_BOLD);
+                wattroff(win_map , COLOR_PAIR(4)| A_UNDERLINE| A_BOLD);
             }
             else if (map[i][j] == BlockType::GateOut)
             {
@@ -136,7 +140,8 @@ void Board::setMapData(int x, int y, BlockType block)
         printw("Set Out of Range [%d, %d]", x, y);
         return;
     }
-
+    if(x == 0 && y == 0)
+        return;
     map[y][x] = block;
 }
 

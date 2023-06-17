@@ -8,6 +8,24 @@
 #include <ctime>
 
 
+struct Item{
+    explicit Item(int x = 0, int y = 0, int lifeTime = 0) : x(x), y(y), life(lifeTime) {}
+
+    int x, y, life;
+};
+
+struct Gate : public Item{
+    int out_x{};
+    int out_y{};
+
+    int dest_x{};
+    int dest_y{};
+
+    MoveDir out_dir;
+    bool fixed{false};
+    bool active{false};
+};
+
 class Spawner{
 private:
     int range_x;
@@ -39,7 +57,8 @@ public:
     void spawnGate(int inX, int inY, int outX, int outY);
     bool getRottenGate(Gate& result);
     void setGateActive(int second);
-    void getGateDestination(int& destX, int& destY);
+    void setGateDestination(int& destX, int& destY, MoveDir moveDir);
+    Gate& getGate();
 
     [[nodiscard]] bool canSpawn(BlockType block) const;
 };
@@ -76,10 +95,11 @@ void Spawner::update() {
         for(auto & item : poison_items)
             item.life--;
     }
-    if(isGateSpawn)
-    {
+
+    if (isGateSpawn)
         gate.life--;
-    }
+    if (gate.life < 0)
+        gate.active = false;
 }
 
 void Spawner::spawnGrowthItem(int x, int y)
@@ -163,9 +183,6 @@ void Spawner::spawnGate(int inX, int inY, int outX, int outY) {
     gate.out_x = outX;
     gate.out_y = outY;
 
-    //TODO : 생성확인
-    //TODO : 기능구현
-
     if (outX == 0) // in left wall
     {
         gate.fixed = true;
@@ -212,8 +229,34 @@ void Spawner::setGateActive(int second) {
     gate.active = true;
 }
 
-void Spawner::getGateDestination(int &destX, int &destY) {
+void Spawner::setGateDestination(int &destX, int &destY, MoveDir moveDir) {
+    if(gate.fixed)
+    {
+        destY = gate.dest_y;
+        destX = gate.dest_x;
+        return;
+    }
+    gate.out_dir = moveDir;
+    switch (moveDir) {
+        case Left:
+            destY = gate.out_y;
+            destX = gate.out_x-1;
+            break;
+        case Right:
+            destY = gate.out_y;
+            destX = gate.out_x+1;
+            break;
+        case Up:
+            destY = gate.out_y + 1;
+            destX = gate.out_x;
+            break;
+        case Down:
+            destY = gate.out_y - 1;
+            destX = gate.out_x;
+            break;
+    }
+}
 
-    destY = gate.dest_y;
-    destX = gate.dest_x;
+Gate& Spawner::getGate() {
+    return gate;
 }

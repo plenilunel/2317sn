@@ -6,7 +6,7 @@ public:
     static int WIN_WIDTH;
     static int DIMENSION;
 
-    const static int SNAKE_START_XPOS = 10;
+    const static int SNAKE_START_XPOS = 20;
     const static int SNAKE_START_YPOS = 10;
 
     const static int GROWTH_SPAWN_DELAY = 40;
@@ -28,6 +28,6 @@ enum BlockType{
 };
 
 enum MoveDir{
-    Left, Right, Up, Down
+    Left, Up, Right, Down
 };
 

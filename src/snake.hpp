@@ -80,9 +80,6 @@ void Snake::move(int destX, int destY) const {
 }
 
 void Snake::insert() {
-    if (head == nullptr || tail == nullptr) {
-        //throw exception
-    }
 
     Body *tmp = new Body(tail->x, tail->y);
     switch (m_dir) {

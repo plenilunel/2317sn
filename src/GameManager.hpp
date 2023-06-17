@@ -59,15 +59,16 @@ void GameManager::initSnakeGame()
     start_color();
     use_default_colors();
 
-    init_pair(1, COLOR_YELLOW, COLOR_YELLOW); //snake head
+    init_pair(1, COLOR_CYAN, COLOR_CYAN); //snake head
     init_pair(2, COLOR_BLUE, COLOR_BLUE); // snake body
     init_pair(3, COLOR_WHITE, COLOR_WHITE); // wall and conner
-    init_pair(4, COLOR_GREEN, COLOR_BLACK); // gate in color
-    init_pair(5, COLOR_RED, COLOR_BLACK); // gate out color
+    init_pair(4, COLOR_BLUE, COLOR_WHITE); // gate in color
+    init_pair(5, COLOR_RED, COLOR_WHITE); // gate out color
     init_pair(6, COLOR_GREEN, COLOR_BLACK); // Growth Item Color
     init_pair(7, COLOR_MAGENTA, COLOR_BLACK); // Poison Item Color
 
-    init_pair(10, COLOR_WHITE, COLOR_BLACK); // bg
+
+    init_pair(10, COLOR_BLACK, COLOR_WHITE); // bg
     wbkgd(stdscr, COLOR_PAIR(10));
 }
 
@@ -157,6 +158,14 @@ void GameManager::applyItemBlock(BlockType block) {
         //by inverting move direction
         spawner.setGateActive(snake._size);
 
+        int destX, destY;
+        int i = 0;
+        do {
+            spawner.setGateDestination(destX, destY, static_cast<MoveDir>((snake.m_dir + i++) % 4));
+        }while(i < 4 && board.getMapData(destX, destY) == BlockType::Wall);
+
+        snake.m_dir = spawner.getGate().out_dir;
+        snake.move(destX, destY);
     }
 }
 
