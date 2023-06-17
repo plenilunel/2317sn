@@ -12,16 +12,28 @@
 int exam_map[DIM_Y][DIM_X];
 void stage1()
 {
-    //0 ~ 69 (width)
-    //0 ~ 46 (height)
-    // 1, 2 좌표에 벽 만들기
-    exam_map[1][2] = BlockType::Wall;
-    //1,3 좌표에 벽 만들기
-    exam_map[1][3] = BlockType::Wall;
+    int stage1_x_point = DIM_Y / 2; //배열 중앙 x좌표
+    int stage1_y_point = DIM_X / 2; //배열 중앙 y좌표
 
-    // 원래 동적으로 맵 사이즈 정하려 했는데 그냥 저 사이즈가 max라고 생각 하고 안쪽에서 벽을 만들어 주시면 됩니다.
-    //
+    if(DIM_Y % 2 == 0){
+        stage1_x_point--; //현재 배열의 가로가 짝수일 경우 1을 빼준다.
+    }   
+    if(DIM_X % 2 == 0){
+        stage1_y_point--; //현재 배열의 세로가 짝수일 경우 1을 빼준다.
+    }
 
+    //세로 벽을 만드는 반복문
+    for(int i=stage1_x_point-(stage1_x_point/2); i<stage1_x_point+(stage1_x_point/2); i++){
+        exam_map[i][stage1_y_point] = BlockType::Wall;
+    }
+
+    //가로 벽을 만드는 반복문
+    for(int i=stage1_y_point-(stage1_y_point/2); i<stage1_y_point+(stage1_y_point/2); i++){
+        exam_map[stage1_x_point][i] = BlockType::Wall;
+    }
+
+    //배열 중앙의 값은 Conner이어야 한다.
+    exam_map[stage1_x_point][stage1_y_point] = BlockType::Conner;
 }
 
 void makeStage()
