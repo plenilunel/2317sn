@@ -24,6 +24,8 @@ struct Item{
 
     int poison_cnt;
     int poison_spawn_timer;
+    deque<Item> poison_items;
+
 public:
     void awake(int, int);
     void getRandomPosition(int& x, int& y) const;
@@ -31,8 +33,10 @@ public:
     void update();
 
     void spawnGrowthItem(int x, int y);
-
     bool getRottenGrowth(int& rotten_x, int& rotten_y);
+
+    void spawnPoisonItem(int x, int y);
+    bool getRottenPoison(int& rotten_x, int& rotten_y);
 
     [[nodiscard]] bool canSpawn(BlockType block) const;
 };
@@ -52,11 +56,35 @@ void Spawner::getRandomPosition(int &x, int &y) const
     y = rand() % range_y + 1;
 }
 
+void Spawner::update() {
+
+    growth_spawn_timer--;
+    poison_spawn_timer--;
+
+    if(!growth_items.empty())
+    {
+        for(auto & item : growth_items)
+            item.life--;
+    }
+    if(!poison_items.empty())
+    {
+        for(auto & item : poison_items)
+            item.life--;
+    }
+}
+
 void Spawner::spawnGrowthItem(int x, int y)
 {
     growth_spawn_timer = Misc::GROWTH_SPAWN_DELAY;
     growth_items.push_back(Item(x, y, Misc::GROWTH_LIFE_TIME));
     growth_cnt++;
+}
+
+void Spawner::spawnPoisonItem(int x, int y)
+{
+    poison_spawn_timer = Misc::POISON_SPAWN_DELAY;
+    poison_items.push_back(Item(x, y, Misc::POISON_LIFE_TIME));
+    poison_cnt++;
 }
 
 bool Spawner::canSpawn(BlockType block) const {
@@ -94,13 +122,18 @@ bool Spawner::getRottenGrowth(int &rotten_x, int &rotten_y) {
     return false;
 }
 
-void Spawner::update() {
+bool Spawner::getRottenPoison(int &rotten_x, int &rotten_y) {
+    if(poison_items.empty())
+        return false;
 
-    growth_spawn_timer--;
-
-    if(!growth_items.empty())
+    if(poison_items.front().life <= 0)
     {
-        for(auto & item : growth_items)
-            item.life--;
+        rotten_x = poison_items.front().x;
+        rotten_y = poison_items.front().y;
+        poison_items.pop_front();
+        poison_cnt--;
+        return true;
     }
+
+    return false;
 }

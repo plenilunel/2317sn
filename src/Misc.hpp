@@ -13,8 +13,9 @@ public:
     const static int GROWTH_MAX_COUNT = 3;
     const static int GROWTH_LIFE_TIME = 50;
 
-    const static int POISON_SPAWN_DELAY = 5;
-    const static int POISON_MAX_COUNT = 5;
+    const static int POISON_SPAWN_DELAY = 40;
+    const static int POISON_MAX_COUNT = 3;
+    const static int POISON_LIFE_TIME = 50;
 };
 int Misc::WIN_WIDTH = 0;
 int Misc::WIN_HEIGHT = 0;

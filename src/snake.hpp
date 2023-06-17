@@ -18,7 +18,7 @@ public:
     void awake();
     // move snake to dir_x,y position
     void move(MoveDir moveDir);
-    bool isAlive();
+    bool isAlive() const;
     [[nodiscard]] bool isInSnake(const int& x, const int& y) const;
     void insert();
     void remove();
@@ -41,6 +41,10 @@ void Snake::awake() {
 }
 
 void Snake::move(MoveDir moveDir) {
+#ifdef DEBUG
+    mvprintw(LINES-1, 0, "Head : <%d,%d>, Tail : <%d,%d>", head->x, head->y, tail->x, tail->y);
+#endif
+
     m_dir = moveDir;
     Body *p = tail;
 
@@ -93,7 +97,7 @@ void Snake::insert() {
     snake_size++;
 }
 
-bool Snake::isAlive()
+bool Snake::isAlive() const
 {
     if(snake_size < 3)
         return false;
@@ -113,6 +117,7 @@ bool Snake::isAlive()
 void Snake::remove() {
     Body *p = tail;
     tail = tail->prev;
+    tail->next = nullptr;
     delete p;
     snake_size--;
 }

@@ -79,7 +79,6 @@ void Board::buildMap(int stage_idx) {
 
 void Board::printMap()
 {
-
     for(int i = 0; i < height; i++)
     {
         for(int j = 0; j < width; j++)
@@ -107,6 +106,12 @@ void Board::printMap()
                 wattron(win_map, COLOR_PAIR(6) | A_VERTICAL | A_BOLD | A_BLINK);
                 mvwaddch(win_map, i, j, 'G');
                 wattroff(win_map , COLOR_PAIR(6) | A_VERTICAL | A_BOLD | A_BLINK);
+            }
+            else if(map[i][j] == BlockType::Poison)
+            {
+                wattron(win_map, COLOR_PAIR(7) | A_VERTICAL | A_BOLD | A_BLINK);
+                mvwaddch(win_map, i, j, 'P');
+                wattroff(win_map , COLOR_PAIR(7) | A_VERTICAL | A_BOLD | A_BLINK);
             }
         }
     }

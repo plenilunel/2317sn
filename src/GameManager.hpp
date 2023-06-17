@@ -65,6 +65,7 @@ void GameManager::initSnakeGame()
     init_pair(4, COLOR_GREEN, COLOR_WHITE); // gate in color
     init_pair(5, COLOR_RED, COLOR_WHITE); // gate out color
     init_pair(6, COLOR_GREEN, COLOR_BLACK); // Growth Item Color
+    init_pair(7, COLOR_MAGENTA, COLOR_BLACK); // Poison Item Color
 
     init_pair(10, COLOR_WHITE, COLOR_BLACK); // bg
     wbkgd(stdscr, COLOR_PAIR(10));
@@ -214,6 +215,9 @@ void GameManager::updateItemInfo()
     if (spawner.getRottenGrowth(rottenItemPos_x, rottenItemPos_y))
         board.setMapData(rottenItemPos_x, rottenItemPos_y, Empty);
 
+    if(spawner.getRottenPoison(rottenItemPos_x, rottenItemPos_y))
+        board.setMapData(rottenItemPos_x, rottenItemPos_y, Empty);
+
     //TODO : do same thing on poison , gate ...
 
 
@@ -234,6 +238,11 @@ void GameManager::spawnItem() {
 
     if(spawner.canSpawn(BlockType::Poison))
     {
+        do {
+            spawner.getRandomPosition(x, y);
+        }while(board.getMapData(x,y) != BlockType::Empty || snake.isInSnake(x,y));
 
+        spawner.spawnPoisonItem(x, y);
+        board.setMapData(x, y, Poison);
     }
 }
