@@ -236,23 +236,27 @@ void Spawner::setGateDestination(int &destX, int &destY, MoveDir moveDir) {
         destX = gate.dest_x;
         return;
     }
-    gate.out_dir = moveDir;
+
     switch (moveDir) {
         case Left:
             destY = gate.out_y;
             destX = gate.out_x-1;
+            gate.out_dir = Right;
             break;
         case Right:
             destY = gate.out_y;
             destX = gate.out_x+1;
+            gate.out_dir = Left;
             break;
         case Up:
             destY = gate.out_y + 1;
             destX = gate.out_x;
+            gate.out_dir = Down;
             break;
         case Down:
             destY = gate.out_y - 1;
             destX = gate.out_x;
+            gate.out_dir = Up;
             break;
     }
 }

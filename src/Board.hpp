@@ -73,12 +73,12 @@ void Board::buildMap(int stage_idx) {
 
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-    map[10][10] = BlockType::Wall;
-    map[11][10] = BlockType::Wall;
-    map[12][10] = BlockType::Wall;
-    map[13][10] = BlockType::Wall;
-    map[14][10] = BlockType::Wall;
-    map[15][10] = BlockType::Wall;
+    //ㄴ 코너 만들기
+    for (int i = 10; i <= 30; i++)
+        map[i][10] = BlockType::Wall;
+
+    for (int i = 10; i <= 50; i++)
+        map[30][i] = BlockType::Wall;
 
 }
 
@@ -88,7 +88,7 @@ void Board::printMap()
     {
         for(int j = 0; j < width; j++)
         {
-            if(map[i][j] == BlockType::Wall) // map[i][j] == BlockType::Conner ||
+            if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall) //
             {
                 wattron(win_map, COLOR_PAIR(3));
                 mvwaddch(win_map, i, j, ' ');
@@ -96,9 +96,9 @@ void Board::printMap()
             }
             else if (map[i][j] == BlockType::GateIn)
             {
-                wattron(win_map, COLOR_PAIR(4) | A_UNDERLINE | A_BOLD);
+                wattron(win_map, COLOR_PAIR(4) | A_UNDERLINE);
                 mvwaddch(win_map, i, j, 'O');
-                wattroff(win_map , COLOR_PAIR(4)| A_UNDERLINE| A_BOLD);
+                wattroff(win_map , COLOR_PAIR(4)| A_UNDERLINE);
             }
             else if (map[i][j] == BlockType::GateOut)
             {

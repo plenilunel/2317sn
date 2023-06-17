@@ -162,7 +162,7 @@ void GameManager::applyItemBlock(BlockType block) {
         int i = 0;
         do {
             spawner.setGateDestination(destX, destY, static_cast<MoveDir>((snake.m_dir + i++) % 4));
-        }while(i < 4 && board.getMapData(destX, destY) == BlockType::Wall);
+        }while(i <= 4 && board.getMapData(destX, destY) == BlockType::Wall);
 
         snake.m_dir = spawner.getGate().out_dir;
         snake.move(destX, destY);
