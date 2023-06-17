@@ -13,7 +13,6 @@ private:
     int start_y{}, start_x{};
     WINDOW* score_win{};
     WINDOW* mission_win{};
-
     int snake_pos_x{};
     int snake_pos_y{};
     int snake_size{};
@@ -27,6 +26,8 @@ private:
     chrono::time_point<chrono::steady_clock> curr_time{};
     void updateScoreWin();
     void calcTotal_Score();
+
+    void updateMissionWin();
 public:
     void awake(int h, int w, int starty, int startx);
 
@@ -53,17 +54,17 @@ void ScoreBoard::awake(int h, int w, int starty, int startx) {
     start_x = startx;
 
     score_win = newwin(height/2 + height/3, width, start_y, start_x);
-    mission_win = newwin(height/2, width, starty*4, start_x);
+    mission_win = newwin(height/2 + height/4, width, start_y*3, start_x);
 
     wbkgd(score_win, COLOR_PAIR(10) | A_BOLD);
     wbkgd(mission_win, COLOR_PAIR(10) | A_BOLD);
 }
 
 void ScoreBoard::update() {
+    updateMissionWin();
+
     calcTotal_Score();
     updateScoreWin();
-
-    wrefresh(mission_win);
 }
 
 void ScoreBoard::onDisable() {
@@ -87,12 +88,12 @@ void ScoreBoard::updateScoreWin() {
     wattroff(score_win, A_BLINK);
 
     mvwprintw(score_win,3, 3,"Score : %d", total_score);
-
     mvwprintw(score_win,4, 3,"Gate_Count : %d", gate_score);
     mvwprintw(score_win,5, 3,"Growth_Count : %d", growth_score);
     mvwprintw(score_win,6, 3,"Poison_Count : %d", poison_score);
     mvwprintw(score_win,7, 3,"Time : %d min %d sec", (int)time/60, (int)time%60);
     wattroff(score_win, A_DIM);
+
     wrefresh(score_win);
 }
 
@@ -129,7 +130,12 @@ void ScoreBoard::addPoisonScore(int amount) {
 void ScoreBoard::updateTime() {
     curr_time = chrono::steady_clock::now();
     time = chrono::duration_cast<chrono::seconds>(curr_time - start_time).count();
+}
 
+
+void ScoreBoard::updateMissionWin() {
+    wborder(mission_win, '|', '|', '-', '-', '+', '+', '+', '+');
+    wrefresh(mission_win);
 }
 
 #endif //SNAKE_SCOREHANDLER_H

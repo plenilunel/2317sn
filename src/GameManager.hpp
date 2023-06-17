@@ -45,7 +45,7 @@ void GameManager::awake()
 
     score.awake(Misc::DIMENSION/2,
                 (Misc::DIMENSION + Misc::DIMENSION/2),
-                (Misc::WIN_HEIGHT - Misc::DIMENSION) / 2 + 5,
+                (Misc::WIN_HEIGHT - Misc::DIMENSION) / 2 + 1,
                 (Misc::WIN_WIDTH - Misc::DIMENSION) / 2 + Misc::DIMENSION/3);
 
     spawner.awake(Misc::DIMENSION,Misc::DIMENSION + Misc::DIMENSION/2);
@@ -113,6 +113,7 @@ int GameManager::update()
 void GameManager::onDisable()
 {
     board.onDisable();
+    score.onDisable();
     nodelay(stdscr, false);
     clear();
 }
