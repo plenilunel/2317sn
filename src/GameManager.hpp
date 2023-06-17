@@ -62,8 +62,8 @@ void GameManager::initSnakeGame()
     init_pair(1, COLOR_YELLOW, COLOR_YELLOW); //snake head
     init_pair(2, COLOR_BLUE, COLOR_BLUE); // snake body
     init_pair(3, COLOR_WHITE, COLOR_WHITE); // wall and conner
-    init_pair(4, COLOR_GREEN, COLOR_WHITE); // gate in color
-    init_pair(5, COLOR_RED, COLOR_WHITE); // gate out color
+    init_pair(4, COLOR_GREEN, COLOR_BLACK); // gate in color
+    init_pair(5, COLOR_RED, COLOR_BLACK); // gate out color
     init_pair(6, COLOR_GREEN, COLOR_BLACK); // Growth Item Color
     init_pair(7, COLOR_MAGENTA, COLOR_BLACK); // Poison Item Color
 
@@ -155,6 +155,7 @@ void GameManager::applyItemBlock(BlockType block) {
     {
         //TODO : get Gate Out position and Move snake head to that pos
         //by inverting move direction
+        spawner.setGateActive(snake._size);
 
     }
 }
@@ -171,6 +172,7 @@ void GameManager::validate(BlockType bt)
     switch (bt) {
         case Wall:
         case Conner:
+        case GateOut:
             isValid = false;
             break;
 #ifdef DEBUG
@@ -219,8 +221,12 @@ void GameManager::updateItemInfo()
     if(spawner.getRottenPoison(rottenItemPos_x, rottenItemPos_y))
         board.setMapData(rottenItemPos_x, rottenItemPos_y, Empty);
 
-
-
+    Gate tmp;
+    if(spawner.getRottenGate(tmp))
+    {
+        board.setMapData(tmp.x, tmp.y, BlockType::Wall);
+        board.setMapData(tmp.out_x, tmp.out_y, BlockType::Wall);
+    }
 
 }
 

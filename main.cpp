@@ -7,6 +7,8 @@ using namespace std;
 #define DEBUG
 
 #include "src/Misc.hpp"
+#include "src/Stage.hpp"
+#include "src/Item.hpp"
 #include "src/Board.hpp"
 #include "src/snake.hpp"
 #include "src/Spawner.hpp"

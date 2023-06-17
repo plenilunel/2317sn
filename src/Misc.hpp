@@ -16,6 +16,8 @@ public:
     const static int POISON_SPAWN_DELAY = 20;
     const static int POISON_MAX_COUNT = 4;
     const static int POISON_LIFE_TIME = 30;
+
+    const static int GATE_LIFE_TIME = 100;
 };
 int Misc::WIN_WIDTH = 0;
 int Misc::WIN_HEIGHT = 0;

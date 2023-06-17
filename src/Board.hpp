@@ -59,7 +59,7 @@ void Board::clear()
 }
 
 void Board::buildMap(int stage_idx) {
-
+    mvprintw(0,0,"%d %d",height,width);
     map = new int*[height];
     for (int i = 0; i < height; i++)
         map[i] = new int[width];
@@ -86,21 +86,21 @@ void Board::printMap()
         {
             if(map[i][j] == BlockType::Conner || map[i][j] == BlockType::Wall)
             {
-                wattron(win_map, COLOR_PAIR(3));
-                mvwaddch(win_map, i, j, ' ');
-                wattroff(win_map , COLOR_PAIR(3));
+//                wattron(win_map, COLOR_PAIR(3));
+//                mvwaddch(win_map, i, j, ' ');
+//                wattroff(win_map , COLOR_PAIR(3));
             }
             else if (map[i][j] == BlockType::GateIn)
             {
-                wattron(win_map, COLOR_PAIR(4) | A_BLINK);
+                wattron(win_map, COLOR_PAIR(4) | A_UNDERLINE | A_HORIZONTAL | A_BOLD);
                 mvwaddch(win_map, i, j, 'O');
-                wattroff(win_map , COLOR_PAIR(4)| A_BLINK);
+                wattroff(win_map , COLOR_PAIR(4)| A_UNDERLINE| A_HORIZONTAL | A_BOLD);
             }
             else if (map[i][j] == BlockType::GateOut)
             {
-                wattron(win_map, COLOR_PAIR(5) | A_BLINK);
+                wattron(win_map, COLOR_PAIR(5) | A_UNDERLINE);
                 mvwaddch(win_map, i, j, 'O');
-                wattroff(win_map , COLOR_PAIR(5)| A_BLINK);
+                wattroff(win_map , COLOR_PAIR(5)| A_UNDERLINE);
             }
             else if(map[i][j] == BlockType::Growth)
             {

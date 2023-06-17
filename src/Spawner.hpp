@@ -7,24 +7,9 @@
 #include <cstdlib>
 #include <ctime>
 
+
 class Spawner{
 private:
-
-struct Item{
-    explicit Item(int x, int y, int lifeTime) : x(x), y(y), life(lifeTime) {}
-
-    int x, y, life;
-};
-
-struct Gate : Item{
-
-    int out_x;
-    int out_y;
-    MoveDir in_dir;
-    MoveDir out_dir;
-    bool fixed;
-};
-
     int range_x;
     int range_y;
 
@@ -36,7 +21,7 @@ struct Gate : Item{
     int poison_spawn_timer;
     deque<Item> poison_items;
 
-    bool canGateSpawn;
+    bool isGateSpawn;
     Gate gate;
 
 public:
@@ -51,7 +36,10 @@ public:
     void spawnPoisonItem(int x, int y);
     bool getRottenPoison(int& rotten_x, int& rotten_y);
 
-    void spawnGate(int in_x, int in_y, int outX, int outY);
+    void spawnGate(int inX, int inY, int outX, int outY);
+    bool getRottenGate(Gate& result);
+    void setGateActive(int second);
+    void getGateDestination(int& destX, int& destY);
 
     [[nodiscard]] bool canSpawn(BlockType block) const;
 };
@@ -64,7 +52,7 @@ void Spawner::awake(int height, int width) {
 
     growth_cnt = growth_spawn_timer = 0;
     poison_cnt = poison_spawn_timer = 0;
-    canGateSpawn = true;
+    isGateSpawn = false;
 }
 
 void Spawner::getRandomPosition(int &x, int &y) const
@@ -88,7 +76,7 @@ void Spawner::update() {
         for(auto & item : poison_items)
             item.life--;
     }
-    if(gate.life > 0)
+    if(isGateSpawn)
     {
         gate.life--;
     }
@@ -120,7 +108,8 @@ bool Spawner::canSpawn(BlockType block) const {
                 return false;
             break;
         case GateIn:
-
+            if (isGateSpawn)
+                return false;
             break;
         //TODO : case gate
         default:
@@ -161,21 +150,70 @@ bool Spawner::getRottenPoison(int &rotten_x, int &rotten_y) {
     return false;
 }
 
-void Spawner::spawnGate(int in_x, int in_y, int outX, int outY) {
-    gate.x = in_x;
-    gate.y = in_y;
+void Spawner::spawnGate(int inX, int inY, int outX, int outY) {
+
+    isGateSpawn = true;
+    gate.active = false;
+    gate.fixed = false;
+    gate.life = Misc::GATE_LIFE_TIME;
+
+    gate.x = inX;
+    gate.y = inY;
 
     gate.out_x = outX;
     gate.out_y = outY;
 
-    gate.fixed = false;
     //TODO : 생성확인
     //TODO : 기능구현
 
-    if(outX == 0) // in left wall
+    if (outX == 0) // in left wall
     {
         gate.fixed = true;
         gate.out_dir = MoveDir::Right;
-        gate.out_x = 1;
+        gate.dest_x = 1;
+        gate.dest_y = outY;
     }
+    if (outX == range_x - 1)
+    {
+        gate.fixed = true;
+        gate.out_dir = MoveDir::Left;
+        gate.dest_x = range_x - 2;
+        gate.dest_y = outY;
+    }
+    if (outY == 0)
+    {
+        gate.fixed = true;
+        gate.out_dir = MoveDir::Down;
+        gate.dest_x = outX;
+        gate.dest_y = 1;
+    }
+    if (outY == range_y - 1)
+    {
+        gate.fixed = true;
+        gate.out_dir = MoveDir::Up;
+        gate.dest_x = outX;
+        gate.dest_y = range_y-2;
+    }
+}
+
+bool Spawner::getRottenGate(Gate &result) {
+
+    if (gate.life <= 0 && !gate.active)
+    {
+        result = gate;
+        isGateSpawn = false;
+        return true;
+    }
+    return false;
+}
+
+void Spawner::setGateActive(int second) {
+    gate.life = second + 2;
+    gate.active = true;
+}
+
+void Spawner::getGateDestination(int &destX, int &destY) {
+
+    destY = gate.dest_y;
+    destX = gate.dest_x;
 }

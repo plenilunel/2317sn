@@ -14,7 +14,7 @@ public:
     Body *head;
     Body *tail;
     MoveDir m_dir{Right};
-    int snake_size;
+    int _size;
     //TODO : insert, refresh to map function
     void awake();
     // move snake to dir_x,y position
@@ -40,7 +40,7 @@ void Snake::awake() {
         tail = t;
     }
 
-    snake_size = 3;
+    _size = 3;
 }
 
 void Snake::move(MoveDir moveDir) {
@@ -102,12 +102,12 @@ void Snake::insert() {
     tmp->prev = tail;
     tail->next = tmp;
     tail = tmp;
-    snake_size++;
+    _size++;
 }
 
 bool Snake::isAlive() const
 {
-    if(snake_size < 3)
+    if(_size < 3)
         return false;
 
     Body* p = head->next;
@@ -127,7 +127,7 @@ void Snake::remove() {
     tail = tail->prev;
     tail->next = nullptr;
     delete p;
-    snake_size--;
+    _size--;
 }
 
 bool Snake::isInSnake(const int &x, const int &y) const
