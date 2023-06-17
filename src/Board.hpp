@@ -74,11 +74,11 @@ void Board::buildMap(int stage_idx) {
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
     //ㄴ 코너 만들기
-    for (int i = 10; i <= 30; i++)
-        map[i][10] = BlockType::Wall;
+    for (int i = height/3; i <= height - height/2; i++)
+        map[i][width/3] = BlockType::Wall;
 
-    for (int i = 10; i <= 50; i++)
-        map[30][i] = BlockType::Wall;
+    for (int i = width/3; i <= width - width/2; i++)
+        map[height - height/2][i] = BlockType::Wall;
 
 }
 

@@ -67,7 +67,6 @@ void GameManager::initSnakeGame()
     init_pair(6, COLOR_GREEN, COLOR_BLACK); // Growth Item Color
     init_pair(7, COLOR_MAGENTA, COLOR_BLACK); // Poison Item Color
 
-
     init_pair(10, COLOR_BLACK, COLOR_WHITE); // bg
     wbkgd(stdscr, COLOR_PAIR(10));
 }
