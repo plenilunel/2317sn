@@ -251,7 +251,7 @@ void GameManager::updateItemInfo()
 }
 
 void GameManager::updateScoreInfo() {
-    score.addTime();
+    score.updateTime();
     score.setSnakePos(snake.head->x, snake.head->y);
     score.setSnakeSize(snake._size);
 }

@@ -5,6 +5,8 @@
 #ifndef SNAKE_SCOREHANDLER_H
 #define SNAKE_SCOREHANDLER_H
 
+#include <chrono>
+
 class ScoreBoard{
 private:
     int width{}, height{};
@@ -19,7 +21,10 @@ private:
     int growth_score{};
     int poison_score{};
     int total_score{};
-    double time{};
+
+    long time;
+    chrono::time_point<chrono::steady_clock> start_time{};
+    chrono::time_point<chrono::steady_clock> curr_time{};
     void updateScoreWin();
     void calcTotal_Score();
 public:
@@ -36,10 +41,12 @@ public:
     void addGateScore(int amount = 1);
     void addGrowthScore(int amount = 1);
     void addPoisonScore(int amount = 1);
-    void addTime();
+    void updateTime();
 };
 
 void ScoreBoard::awake(int h, int w, int starty, int startx) {
+    start_time = chrono::steady_clock::now();
+
     height = h;
     width = w;
     start_y = starty;
@@ -94,7 +101,7 @@ void ScoreBoard::calcTotal_Score() {
             growth_score*100 +
             gate_score*200 -
             poison_score*100 +
-            time;
+            (int)time;
 
 }
 
@@ -119,8 +126,10 @@ void ScoreBoard::addPoisonScore(int amount) {
     poison_score += amount;
 }
 
-void ScoreBoard::addTime() {
-    time+=0.5;
+void ScoreBoard::updateTime() {
+    curr_time = chrono::steady_clock::now();
+    time = chrono::duration_cast<chrono::seconds>(curr_time - start_time).count();
+
 }
 
 #endif //SNAKE_SCOREHANDLER_H

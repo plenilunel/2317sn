@@ -7,7 +7,6 @@
 #include <cstdlib>
 #include <ctime>
 
-
 struct Item{
     explicit Item(int x = 0, int y = 0, int lifeTime = 0) : x(x), y(y), life(lifeTime) {}
 
