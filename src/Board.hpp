@@ -8,7 +8,7 @@ private:
     WINDOW* win_map{};
     int **map{};
 
-    void buildMap(int stage = 1);
+
     void printMap();
 public:
     void awake(int h, int w, int starty, int startx);
@@ -19,6 +19,7 @@ public:
 
     void clear();
 
+    void buildMap(int stage = 1);
     BlockType getMapData(int x, int y);
     void setMapData(int x, int y, BlockType block);
     WINDOW*& getWinMap() { return win_map; }
@@ -31,6 +32,10 @@ void Board::awake(int h, int w, int starty, int startx)
     start_y = starty;
     start_x = startx;
     win_map = newwin(height, width, start_y, start_x);
+
+    map = new int*[height];
+    for (int i = 0; i < height; i++)
+        map[i] = new int[width];
 
     buildMap();
 }
@@ -58,67 +63,31 @@ void Board::clear()
 }
 
 void Board::buildMap(int stage_idx) {
-    mvprintw(0,0,"%d %d",height,width);
-    map = new int*[height];
-    for (int i = 0; i < height; i++)
-        map[i] = new int[width];
-
     for (int i = 0; i < height; i++)
         for (int j = 0; j < width; j++)
             if (i == 0 || j == 0 || i == height - 1 || j == width - 1)
                 map[i][j] = BlockType::Wall;
             else
                 map[i][j] = BlockType::Empty;
-
     map[0][0] = map[0][width - 1] = map[height - 1][0] = map[height - 1][width - 1] = BlockType::Conner;
 
-//    switch (stage_idx) {
-//        case 1:
-//            break;
-//        case 2:
-//
-//            break;
-//        case 3:
-//            break;
-//
-//    }
-    //4분할 벽
 
-    int stage3_x_point = height / 2;
-    int stage3_y_point = width / 2;
-//
-//    if(height % 2 == 0){
-//        stage3_x_point--;
-//    }
-//    if(width % 2 == 0){
-//        stage3_y_point--;
-//    }
-
-    //세로 벽을 만드는 반복문
-    for(int i=1; i<height-1; i++){
-        map[i][stage3_y_point] = BlockType::Wall;
+    switch (stage_idx) {
+        case 1:
+            Stage::stage1(map, height, width);
+            break;
+        case 2:
+            Stage::stage2(map, height, width);
+            break;
+        case 3:
+            Stage::stage3(map,height, width);
+            break;
+        case 4:
+            Stage::stage4(map, height, width);
+            break;
+        default:
+            break;
     }
-
-    //가로 벽을 만드는 반복문
-    for(int i=1; i<width-1; i++){
-        map[stage3_x_point][i] = BlockType::Wall;
-    }
-
-    //배열 중앙의 값은 Corner이어야 한다.
-    map[stage3_x_point][stage3_y_point] = BlockType::Conner;
-
-    //
-    map[0][stage3_y_point] = BlockType::Conner;
-    map[height-1][stage3_y_point] = BlockType::Conner;
-    map[stage3_x_point][0] = BlockType::Conner;
-    map[stage3_x_point][width-1] = BlockType::Conner;
-    //ㄴ 코너 만들기
-//    for (int i = height/3; i <= height - height/2; i++)
-//        map[i][width/3] = BlockType::Wall;
-//
-//    for (int i = width/3; i <= width - width/2; i++)
-//        map[height - height/2][i] = BlockType::Wall;
-
 }
 
 void Board::printMap()
@@ -163,22 +132,18 @@ void Board::printMap()
 
 BlockType Board::getMapData(int x, int y)
 {
-    if(x < 0 || y < 0 || x > width || y > height)
-    {
-        printw("Get Out of Range [%d, %d]", x, y);
+    if (x < 0 || y < 0 || x > width || y > height)
         return BlockType::Error;
-    }
+
 
     return (BlockType)map[y][x];
 }
 
 void Board::setMapData(int x, int y, BlockType block)
 {
-    if(x < 0 || y < 0 || x > width || y > height)
-    {
-        printw("Set Out of Range [%d, %d]", x, y);
+    if (x < 0 || y < 0 || x > width || y > height)
         return;
-    }
+
     if(x == 0 && y == 0)
         return;
     map[y][x] = block;

@@ -4,10 +4,10 @@
 
 using namespace std;
 
-#define DEBUG
+//#define DEBUG
 
 #include "src/Misc.hpp"
-//#include "src/Stage.hpp"
+#include "src/Stage.hpp"
 #include "src/ScoreBoard.hpp"
 #include "src/Board.hpp"
 #include "src/snake.hpp"
@@ -16,7 +16,6 @@ using namespace std;
 
 int main()
 {
-
     GameManager gm;
 
     gm.awake();
@@ -27,12 +26,23 @@ int main()
         game_condition = gm.update();
 
         if(game_condition == 0)
+        {
+            gm.onDisable();
+            mvprintw((LINES-1)/2, (COLS/2)-8, "GAME END..");
             break;
+        }
+        else if (game_condition == 2)
+        {
+            gm.onDisable();
+            mvprintw((LINES-1)/2, (COLS/2)-8, "WIN..");
+            break;
+        }
+
         usleep(100000);
     }
 
-    gm.onDisable();
-    mvprintw(10, 10, "GAME END..");
+
+
     refresh();
     getch();
     endwin(); // 게임종료

@@ -8,7 +8,7 @@ private:
     ScoreBoard score;
     Snake snake{};
     Spawner spawner;
-    bool isValid{true};
+    int condition{1};
     int curr_stage{1};
 
     static void initSnakeGame();
@@ -100,7 +100,7 @@ int GameManager::update()
     //check condition is valid or not
     validate(block);
 
-    if (isValid)
+    if (condition)
     {
         updateScoreInfo();
         updateItemInfo();
@@ -108,13 +108,19 @@ int GameManager::update()
         displayScore();
         displayBoard();
 
-        if(curr_stage != score.getCurrStage())
+        if (curr_stage != score.getCurrStage())
         {
-            printw("MOVE TO NEXT STAGE");
+            curr_stage = score.getCurrStage();
+            board.buildMap(curr_stage);
         }
+
+        if (curr_stage == 0)
+            return 2;
+
+
     }
 
-    return isValid;
+    return condition;
 }
 
 void GameManager::onDisable()
@@ -130,26 +136,26 @@ void GameManager::moveSnake(chtype ch) {
     switch (ch) {
         case KEY_DOWN:
             if(snake.m_dir == Up)
-                isValid = false;
+                condition = false;
             snake.move(Down);
             break;
         case KEY_UP:
             if(snake.m_dir == Down)
-                isValid = false;
+                condition = false;
             snake.move(Up);
             break;
         case KEY_RIGHT:
             if(snake.m_dir == Left)
-                isValid = false;
+                condition = false;
             snake.move(Right);
             break;
         case KEY_LEFT:
             if(snake.m_dir == Right)
-                isValid = false;
+                condition = false;
             snake.move(Left);
             break;
         case 'q':
-            isValid = false;
+            condition = false;
         default:
             snake.move(snake.m_dir);
     }
@@ -187,18 +193,18 @@ void GameManager::applyItemBlock(BlockType block) {
 
 void GameManager::validate(BlockType bt)
 {
-    if(!isValid)
+    if(!condition)
         return;
 
     //check snake condition
-    isValid = snake.isAlive();
+    condition = snake.isAlive();
 
     //check collision with wall and snake
     switch (bt) {
         case Wall:
         case Conner:
         case GateOut:
-            isValid = false;
+            condition = false;
             break;
 #ifdef DEBUG
         case Error:

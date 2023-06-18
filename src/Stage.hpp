@@ -5,102 +5,95 @@
 #ifndef SNAKE_STAGE_HPP
 #define SNAKE_STAGE_HPP
 
-#define DIM_X 69
-#define DIM_Y 46
+struct Stage{
+    static void stage2(int **map, int height, int width)
+    {
+        for (int i = height/3; i <= height - height/2; i++)
+            map[i][width/3] = BlockType::Wall;
 
-//example
-int exam_map[DIM_Y][DIM_X];
-void stage1(int )
-{
-    //가운데 십자 벽
-    
-    int stage1_x_point = DIM_Y / 2; //배열 중앙 x좌표
-    int stage1_y_point = DIM_X / 2; //배열 중앙 y좌표
-
-    if(DIM_Y % 2 == 0){
-        stage1_x_point--; //현재 배열의 가로가 짝수일 경우 1을 빼준다.
-    }   
-    if(DIM_X % 2 == 0){
-        stage1_y_point--; //현재 배열의 세로가 짝수일 경우 1을 빼준다.
+        for (int i = width/3; i <= width - width/2; i++)
+            map[height - height/2][i] = BlockType::Wall;
     }
 
-    //세로 벽을 만드는 반복문
-    for(int i=stage1_x_point-(stage1_x_point/2); i<stage1_x_point+(stage1_x_point/2); i++){
-        exam_map[i][stage1_y_point] = BlockType::Wall;
+    static void stage4(int **map, int height, int width)
+    {
+        // ㄱ, ㄴ 벽
+        int stage2_x_point = height / 2;
+        int stage2_y_point = width / 2;
+
+        if(height % 2 == 0) {
+            stage2_x_point--;
+        }
+        if(width % 2 == 0) {
+            stage2_y_point--;
+        }
+
+        //ㄴ 모양 벽 생성
+        for(int i=stage2_x_point; i<stage2_x_point+10; i++){
+            map[i][9] = BlockType::Wall;
+        }
+        for(int i=9; i<20; i++){
+            map[stage2_x_point+9][i] = BlockType::Wall;
+        }
+
+        //ㄱ 모양 벽 생성
+        for(int i=stage2_x_point; i>stage2_x_point-10; i--){
+            map[i][width-9] = BlockType::Wall;
+        }
+        for(int i=width-9; i>width-20; i--){
+            map[stage2_x_point-9][i] = BlockType::Wall;
+        }
     }
 
-    //가로 벽을 만드는 반복문
-    for(int i=stage1_y_point-(stage1_y_point/2); i<stage1_y_point+(stage1_y_point/2); i++){
-        exam_map[stage1_x_point][i] = BlockType::Wall;
+    static void stage3(int **map, int height, int width)
+    {
+        int middle_y = height/2;
+        int middle_x = width/2;
+        //세로 벽을 만드는 반복문
+        for (int i = 1; i < height; i++)
+            map[i][middle_x] = BlockType::Wall;
+
+        //가로 벽을 만드는 반복문
+        for (int i = 1; i < width; i++)
+            map[middle_y][i] = BlockType::Wall;
+
+        //배열 중앙의 값은 Corner이어야 한다.
+        map[middle_y][middle_x] = BlockType::Conner;
+
+        map[0][middle_x] = BlockType::Conner;
+        map[height-1][middle_x] = BlockType::Conner;
+        map[middle_y][0] = BlockType::Conner;
+        map[middle_y][width-1] = BlockType::Conner;
     }
 
-    //배열 중앙의 값은 Conner이어야 한다.
-    exam_map[stage1_x_point][stage1_y_point] = BlockType::Conner;
-}
+    static void stage1(int **map, int height, int width)
+    {
+        int middle_y = height/2;
+        int middle_x = width/2;
 
-void stage2(int height, int width)
-{
-    // ㄱ, ㄴ 벽
-    
-    int stage2_x_point = height / 2;
-    int stage2_y_point = width / 2;
+        int left_wall_pivot_x = height/4 + height/8;
+        int left_wall_pivot_y = width/3 + width/6;
 
-    if(height % 2 == 0) {
-        stage2_x_point--;
+        for(int i = 0; i <= left_wall_pivot_x; i++)
+            map[left_wall_pivot_y][i] = BlockType::Wall;
+
+        for(int i = 3; i < left_wall_pivot_y; i++)
+            map[i][left_wall_pivot_x] = BlockType::Wall;
+
+        for(int i = middle_y; i < left_wall_pivot_y; i++)
+            map[i][middle_x] = BlockType::Wall;
+
+        for(int i = middle_x; i > left_wall_pivot_x; i--)
+            map[middle_y][i] = BlockType::Wall;
+
+        int right_wall_pivot = height - height / 4 + height / 8;
+
+        for(int i = width-1; i >= right_wall_pivot; i--)
+            map[left_wall_pivot_y][i] = BlockType::Wall;
+
+        for(int i = height-right_wall_pivot; i < left_wall_pivot_y; i++)
+            map[i][right_wall_pivot] = BlockType::Wall;
     }
-    if(width % 2 == 0) {
-        stage2_y_point--;
-    }
+};
 
-    //ㄴ 모양 벽 생성
-    for(int i=stage2_x_point; i<stage2_x_point+10; i++){
-        map[i][9] = BlockType::Wall;
-    }
-    for(int i=9; i<20; i++){
-        map[stage2_x_point+9][i] = BlockType::Wall;
-    }
-
-    //ㄱ 모양 벽 생성
-    for(int i=stage2_x_point; i>stage2_x_point-10; i--){
-        map[i][width-9] = BlockType::Wall;
-    }
-    for(int i=width-9; i>width-20; i--){
-        map[stage2_x_point-9][i] = BlockType::Wall;
-    }
-}
-
-void stage3()
-{
-    //4분할 벽
-    
-    int stage3_x_point = DIM_Y / 2;
-    int stage3_y_point = DIM_X / 2;
-
-    if(DIM_Y % 2 == 0){
-        stage1_x_point--;
-    }   
-    if(DIM_X % 2 == 0){
-        stage1_y_point--;
-    }
-
-    //세로 벽을 만드는 반복문
-    for(int i=1; i<DIM_Y-1; i++){
-        exam_map[i][stage3_y_point] = BlockType::Wall;
-    }
-
-    //가로 벽을 만드는 반복문
-    for(int i=1; i<DIM_X-1; i++){
-        exam_map[stage3_x_point][i] = BlockType::Wall;
-    }
-
-    //배열 중앙의 값은 Corner이어야 한다.
-    exam_map[stage3_x_point][stage3_y_point] = BlockType::Conner;
-
-    //
-    exam_map[0][stage3_y_point] = BlockType::Conner;
-    exam_map[DIM_Y-1][stage3_y_point] = BlockType::Conner;
-    exam_map[stage3_x_point][0] = BlockType::Conner; 
-    exam_map[stage3_x_point][DIM_X-1] = BlockType::Conner;
-}
-void makeStage()
 #endif //SNAKE_STAGE_HPP
