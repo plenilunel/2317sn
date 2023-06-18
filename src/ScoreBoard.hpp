@@ -190,26 +190,26 @@ void ScoreBoard::updateMissionWin() {
 }
 
 void ScoreBoard::printStage1() {
-    mvwprintw(mission_win, 2, 3, "1. 3 Growth item        ( %c )", stage1_mission1);
+    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item  ( %c )", stage1_mission1);
     mvwprintw(mission_win, 3, 3, "2. Avoid collision 30's ( %c )", stage1_mission2);
     mvwprintw(mission_win, 4, 3, "3. Use Gate Once        ( %c )", stage1_mission3);
 }
 
 void ScoreBoard::printStage2() {
-    mvwprintw(mission_win, 2, 3, "1. 7 Growth item        ( %c )", stage2_mission1);
-    mvwprintw(mission_win, 3, 3, "2. 5 Poison item        ( %c )", stage2_mission2);
+    mvwprintw(mission_win, 2, 3, "1. Obtain 7 Growth item ( %c )", stage2_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item ( %c )", stage2_mission2);
     mvwprintw(mission_win, 4, 3, "3. Use Gate  Twice      ( %c )", stage2_mission3);
 }
 
 void ScoreBoard::printStage3() {
     mvwprintw(mission_win, 3, 3, "1. Avoid collision 50's ( %c )", stage3_mission1);
-    mvwprintw(mission_win, 3, 3, "2. 8 Poison item        ( %c )", stage3_mission2);
+    mvwprintw(mission_win, 3, 3, "2. Obtain 8 Poison item ( %c )", stage3_mission2);
     mvwprintw(mission_win, 4, 3, "3. Use Gate 3 times     ( %c )", stage3_mission3);
 }
 
 void ScoreBoard::printStage4() {
-    mvwprintw(mission_win, 2, 3, "1. 17 Growth item        ( %c )", stage4_mission1);
-    mvwprintw(mission_win, 3, 3, "2. 17 Poison item        ( %c )", stage4_mission2);
+    mvwprintw(mission_win, 2, 3, "1. Obtain 17 Growth item ( %c )", stage4_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Obtain 17 Poison item ( %c )", stage4_mission2);
     mvwprintw(mission_win, 4, 3, "3. Avoid collision 2'min ( %c )", stage4_mission3);
 }
 
