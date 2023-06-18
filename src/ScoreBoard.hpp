@@ -202,7 +202,7 @@ void ScoreBoard::printStage2() {
 }
 
 void ScoreBoard::printStage3() {
-    mvwprintw(mission_win, 3, 3, "1. Avoid collision 50's ( %c )", stage3_mission1);
+    mvwprintw(mission_win, 2, 3, "1. Avoid collision 50's ( %c )", stage3_mission1);
     mvwprintw(mission_win, 3, 3, "2. Obtain 8 Poison item ( %c )", stage3_mission2);
     mvwprintw(mission_win, 4, 3, "3. Use Gate 3 times     ( %c )", stage3_mission3);
 }
