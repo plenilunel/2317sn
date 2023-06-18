@@ -17,7 +17,6 @@ using namespace std;
 int main()
 {
     GameManager gm;
-
     gm.awake();
     int game_condition;
 
