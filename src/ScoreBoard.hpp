@@ -232,7 +232,7 @@ void ScoreBoard::checkMissionCondition() {
         case 2:
             if (growth_score >= 7)
                 stage2_mission1 = 'O';
-            if (poison_score >= 30)
+            if (poison_score >= 5)
                 stage2_mission2 = 'O';
             if (gate_score >= 2)
                 stage2_mission3 = 'O';
