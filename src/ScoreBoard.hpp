@@ -190,7 +190,7 @@ void ScoreBoard::updateMissionWin() {
 }
 
 void ScoreBoard::printStage1() {
-    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item  ( %c )", stage1_mission1);
+    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item ( %c )", stage1_mission1);
     mvwprintw(mission_win, 3, 3, "2. Avoid collision 30's ( %c )", stage1_mission2);
     mvwprintw(mission_win, 4, 3, "3. Use Gate Once        ( %c )", stage1_mission3);
 }
