@@ -164,7 +164,7 @@ void ScoreBoard::updateMissionWin() {
     wattron(mission_win, A_DIM);
 
     wattron(mission_win, A_ITALIC);
-    mvwprintw(mission_win, 1, 3, "               <Mission list>");
+    mvwprintw(mission_win, 1, 3, "<Mission list>");
     wattroff(mission_win, A_ITALIC);
 
     switch (stage) {
@@ -190,27 +190,27 @@ void ScoreBoard::updateMissionWin() {
 }
 
 void ScoreBoard::printStage1() {
-    mvwprintw(mission_win, 2, 3, "1. Obtain 3 Growth item            ( %c )", stage1_mission1);
-    mvwprintw(mission_win, 3, 3, "2. Avoid collision 30 seconds      ( %c )", stage1_mission2);
-    mvwprintw(mission_win, 4, 3, "3. Use Gate more than Once         ( %c )", stage1_mission3);
+    mvwprintw(mission_win, 2, 3, "1. 3 Growth item        ( %c )", stage1_mission1);
+    mvwprintw(mission_win, 3, 3, "2. Avoid collision 30's ( %c )", stage1_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Use Gate Once        ( %c )", stage1_mission3);
 }
 
 void ScoreBoard::printStage2() {
-    mvwprintw(mission_win, 2, 3, "1. Obtain 7 Growth item            ( %c )", stage2_mission1);
-    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item            ( %c )", stage2_mission2);
-    mvwprintw(mission_win, 4, 3, "3. Use Gates more than Twice       ( %c )", stage2_mission3);
+    mvwprintw(mission_win, 2, 3, "1. 7 Growth item        ( %c )", stage2_mission1);
+    mvwprintw(mission_win, 3, 3, "2. 5 Poison item        ( %c )", stage2_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Use Gate  Twice      ( %c )", stage2_mission3);
 }
 
 void ScoreBoard::printStage3() {
-    mvwprintw(mission_win, 3, 3, "2. Avoid collision 50 seconds      ( %c )", stage1_mission2);
-    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item            ( %c )", stage3_mission2);
-    mvwprintw(mission_win, 4, 3, "3. Use Gates more than Twice       ( %c )", stage3_mission3);
+    mvwprintw(mission_win, 3, 3, "1. Avoid collision 50's ( %c )", stage3_mission1);
+    mvwprintw(mission_win, 3, 3, "2. 8 Poison item        ( %c )", stage3_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Use Gate 3 times     ( %c )", stage3_mission3);
 }
 
 void ScoreBoard::printStage4() {
-    mvwprintw(mission_win, 2, 3, "1. Obtain 7 Growth item            ( %c )", stage3_mission1);
-    mvwprintw(mission_win, 3, 3, "2. Obtain 5 Poison item            ( %c )", stage3_mission2);
-    mvwprintw(mission_win, 4, 3, "3. Use Gates more than Twice       ( %c )", stage3_mission3);
+    mvwprintw(mission_win, 2, 3, "1. 17 Growth item        ( %c )", stage4_mission1);
+    mvwprintw(mission_win, 3, 3, "2. 17 Poison item        ( %c )", stage4_mission2);
+    mvwprintw(mission_win, 4, 3, "3. Avoid collision 2'min ( %c )", stage4_mission3);
 }
 
 void ScoreBoard::checkMissionCondition() {
@@ -244,12 +244,12 @@ void ScoreBoard::checkMissionCondition() {
             }
             break;
         case 3:
-            if (growth_score >= 7)
-                stage2_mission1 = 'O';
-            if (poison_score >= 30)
-                stage2_mission2 = 'O';
-            if (gate_score >= 2)
-                stage2_mission3 = 'O';
+            if (time >= 50)
+                stage3_mission1 = 'O';
+            if (poison_score >= 8)
+                stage3_mission2 = 'O';
+            if (gate_score >= 3)
+                stage3_mission3 = 'O';
 
             if(isMissionComplete(stage3_mission1, stage3_mission2, stage3_mission3))
             {
@@ -258,12 +258,12 @@ void ScoreBoard::checkMissionCondition() {
             }
             break;
         case 4:
-            if (growth_score >= 7)
-                stage2_mission1 = 'O';
-            if (poison_score >= 30)
-                stage2_mission2 = 'O';
-            if (gate_score >= 2)
-                stage2_mission3 = 'O';
+            if (growth_score >= 17)
+                stage4_mission1 = 'O';
+            if (poison_score >= 17)
+                stage4_mission2 = 'O';
+            if (time >= 120)
+                stage4_mission3 = 'O';
 
             if(isMissionComplete(stage4_mission1, stage4_mission2, stage4_mission3))
             {
